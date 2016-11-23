@@ -1,16 +1,20 @@
 {
   "name": "ih_analytics",
   "version": "1.0.0",
+  "private": true,
   "description": "In house Analytics Project",
-  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./bin/www"
   },
   "author": "Amit Roy",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.15.2",
+    "debug": "^2.3.3",
     "express": "^4.14.0",
-    "mongodb": "^2.2.11"
+    "mongodb": "^2.2.11",
+    "morgan": "^1.7.0",
+    "multer": "^1.2.0",
+    "xlsx": "^0.8.0"
   }
 }
