@@ -1,0 +1,17 @@
+{
+  "name": "ih_analytics",
+  "description": "In house Analytics Project",
+  "main": "server.js",
+  "authors": [
+    "Amit Roy"
+  ],
+  "license": "ISC",
+  "homepage": "index.html",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
