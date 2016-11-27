@@ -1,0 +1,37 @@
+<div class="vc_container container-fluid" ng-controller="viewController">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search for...">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button">Go!</button>
+                </span>
+            </div>
+
+            <div class="panel panel-primary company-panel">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Companies</h3>
+                </div>
+                <div class="panel-body vc_company_list" scrolly="showMore()">
+                    <div class="list-group">
+                        <a class="list-group-item" ng-repeat="company in companies" href="#/getcompany/{{company.domain}}">
+                        <h4 class="list-group-item-heading"> {{company.company}} </h4>
+                        <p class="list-group-item-text">{{company.city}}, {{company.state}}, {{company.country}}</p>
+                        </a>
+                    </div>
+                </div>
+                <p class="list-status" > Showing {{cursor_skip}} of {{cursor_total}} </p>
+            </div>            
+        </div>
+        <div class="col-md-8">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Company Info</h3>
+                </div>
+                <div class="panel-body">
+                    
+                </div>
+            </div>
+        </div>
+    </div>    
+</div>

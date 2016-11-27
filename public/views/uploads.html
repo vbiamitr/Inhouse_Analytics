@@ -1,0 +1,19 @@
+
+    <div ng-controller="uploadController">
+        <h1>This is upload page for {{type}}</h1>
+        <h4>Upload on file select</h4>
+
+        <button ngf-select="uploadFiles($files)" multiple 
+                ngf-pattern="'.xls,.csv,.xlsx'">Select Files</button>
+        <br>
+        <br>Files:
+        <ul>
+            <li ng-repeat="f in files" style="font:smaller">
+                {{f.name}}
+            </li>
+        </ul>
+        <span class="progress" ng-show="progress >= 0">
+            <div style="width:{{progress}}%" ng-bind="progress + '%'"></div>
+        </span>
+        {{errorMsg}}
+    </div>

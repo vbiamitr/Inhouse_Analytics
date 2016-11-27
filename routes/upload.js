@@ -2,6 +2,9 @@ var express = require('express');
 var multer = require('multer');
 var path = require('path');
 var X = require('xlsx');
+var MongoClient = require('mongodb').MongoClient;
+var conf = require('../config/db');
+var crud = require('../models/crud');
 var router = express.Router();
 
 var storage = multer.diskStorage({
@@ -41,14 +44,24 @@ router.get('/', function (req, res, next) {
 
 router.post('/xlsx', upload.any(), function (req, res, next) {
     if (req.files) {
+        var columns = ['company', 'domain', 'address', 'city', 'state', 'zipcode', 'country', 'industry', 'sic_code', 'revenue', 'employees', 'software', 'parent'];
         for(var i=0;i<req.files.length;i++){
             var file = req.files[i];
             var workbook = X.readFile(file.path);
             var sheet_json = to_json(workbook);
-            console.log(JSON.stringify(sheet_json));
-            console.log("===============================");
-        }
-        res.send(JSON.stringify(req.files));
+            var query ={columns: columns, find:'domain', docs:[]};
+            for(var sheet in sheet_json){
+                query.docs = query.docs.concat(sheet_json[sheet]);
+            };
+           
+           MongoClient.connect(conf.url, function(err, db) {
+                var collection_name = 'company';
+                crud.insertIfNotExistUnorderedBulkOperation(db,collection_name,query,function(){
+                    res.send('Document saved in database');
+                    db.close();
+                });
+            });            
+        }        
     }
     else {
         res.send("Files not found!");
