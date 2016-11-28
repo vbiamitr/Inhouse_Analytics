@@ -45,3 +45,36 @@
 .search-icon{
     font-size: 20px;
 }
+
+a, .field-label {
+    cursor: pointer;
+}
+
+.company-info dt,
+.company-info dd {
+    padding: 7px;        
+}
+
+.info-label h4{
+    font-weight: bold;
+}
+
+.fieldactive {
+    color : #337ab7 !important;
+}
+
+.vc-advsearch-pnl-body {
+    font-size:12px;
+    background-color: #f5f5f5;
+    overflow-y: auto;
+    color: #999999;
+}
+
+.vc-advsearch-pnl-body .form-control {
+    height: 25px;
+    padding: 5px 5px;
+    color: #999999;
+}
+.adv_submit{
+    text-align: right;
+}

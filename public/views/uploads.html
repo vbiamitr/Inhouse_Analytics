@@ -1,19 +1,36 @@
 
     <div ng-controller="uploadController">
-        <h1>This is upload page for {{type}}</h1>
-        <h4>Upload on file select</h4>
-
-        <button ngf-select="uploadFiles($files)" multiple 
-                ngf-pattern="'.xls,.csv,.xlsx'">Select Files</button>
-        <br>
-        <br>Files:
-        <ul>
-            <li ng-repeat="f in files" style="font:smaller">
-                {{f.name}}
-            </li>
-        </ul>
-        <span class="progress" ng-show="progress >= 0">
-            <div style="width:{{progress}}%" ng-bind="progress + '%'"></div>
-        </span>
-        {{errorMsg}}
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                    <h3 class="panel-title">Add Company </h3>
+            </div>
+            <div class="panel-body">
+                <div class="alert alert-warning">
+                    <h4><strong>Note :</strong> The uploaded xlsx file should have column header with following name to save data into database. </h4>
+                    <h4>
+                        <ul class="list-inline">
+                            <li class="list-inline-item" ng-repeat="field in fields"><span class="field-label" ng-click="getFieldInfo(field.key)"><strong ng-class="{ fieldactive: selectedField === field.key }">{{ field.key }}</strong></span> | </li>
+                        </ul>
+                    </h4>
+                    <p class="more-field-info">{{fieldInfo}}</p>
+                </div>
+                <button ngf-select="uploadFiles($files)" multiple ngf-pattern="'.xls,.csv,.xlsx'">Select File</button>
+                <br>
+                <br>Files:
+                <ul>
+                    <li ng-repeat="f in files" style="font:smaller">
+                        {{f.name}}
+                    </li>
+                </ul>
+                <!-- <span class="progress" ng-show="progress >= 0">
+                    <div style="width:{{progress}}%" ng-bind="progress + '%'"></div>
+                </span> -->
+                <div class="progress" ng-show="progress >= 0">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{progress}}%;">
+                        {{progress}}%
+                    </div>
+                </div>
+                {{errorMsg}}
+            </div>
+        </div>        
     </div>
