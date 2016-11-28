@@ -73,4 +73,46 @@ router.get('/getcompany_total', function (req, res, next) {
     });   
 });
 
+router.get('/getcompany/:skip/:limit/:search', function (req, res, next) {
+
+    MongoClient.connect(conf.url, function(err, db) {
+        var collection_name = 'company';
+        var query = { 
+            find: {$text:{$search: req.params.search}}, 
+            skip: Number(req.params.skip),
+            limit: Number(req.params.limit)
+        };
+        crud.find(db,collection_name,query,function(docs){
+            if(docs && docs.length){
+                 res.json(docs);
+            }
+            else
+            {
+                res.json({ error: true , statusText: 'Could not retrieve data!' });
+            }           
+            db.close();
+        });
+    });   
+});
+
+router.get('/getcompany_total/:search', function (req, res, next) {
+
+    MongoClient.connect(conf.url, function(err, db) {
+        var collection_name = 'company';
+        var query = { 
+             find: {$text:{$search: req.params.search}}           
+        };
+        crud.count(db,collection_name,query,function(count){
+            if(typeof count != "undefined"){
+                 res.json({cursor_total: count});
+            }
+            else
+            {
+                res.json({ error: true , statusText: 'Could not retrieve data!' });
+            }           
+            db.close();
+        });
+    });   
+});
+
 module.exports = router;

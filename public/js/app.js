@@ -34,6 +34,27 @@ ih_app.factory('configService', ['$http', function($http){
     };
 }]);
 
+ih_app.factory('companyService',['$http', 'configService', function($http, configService){
+    var service = {};
+
+    service.getCompany = function(options, cb){        
+        var urlParams = [configService.server_base_url ,'getcompany', options.skip, options.limit];
+        if(typeof options.search != "undefined"){
+            urlParams.push(options.search);            
+        }             
+        configService.makeHttpRequest(configService.makeUrl(urlParams), cb);
+    };
+
+    service.getCompanyTotal = function(options, cb){
+        var urlParams = [configService.server_base_url ,'getcompany_total'];
+        if(typeof options.search != "undefined"){
+            urlParams.push(options.search);            
+        }
+        configService.makeHttpRequest(configService.makeUrl(urlParams), cb);
+    };
+    return service;
+}]);
+
 ih_app.config(function($routeProvider) {
     $routeProvider
     .when("/upload/:type", {
@@ -75,14 +96,20 @@ ih_app.controller('uploadController', ['$scope', 'Upload', '$timeout', '$routePa
     };
 }]);
 
-ih_app.controller('viewController', ['$scope', 'configService', function ($scope, configService) {
+ih_app.controller('viewController', ['$scope', 'companyService', function ($scope, companyService) {
     $scope.cursor_skip = 0;
     $scope.cursor_limit = 200;
     $scope.stopScrolling = !1;
     $scope.cursor_total = 0;
-    var url = configService.makeUrl([configService.server_base_url ,'getcompany', $scope.cursor_skip, $scope.cursor_limit]);
     $scope.companies = [];
-    configService.makeHttpRequest(url, function(result){
+    var options = {
+        skip : $scope.cursor_skip,
+        limit : $scope.cursor_limit
+    };
+    if($scope.search){
+        options.search = $scope.search;
+    }
+    companyService.getCompany(options, function getCompanyCallback(result){
         if(result.error){
             $scope.error =  result.statusText;
         }
@@ -90,22 +117,29 @@ ih_app.controller('viewController', ['$scope', 'configService', function ($scope
             $scope.cursor_skip = result.length;
             $scope.companies = $scope.companies.concat(result);       
         }
-    });
+    });  
 
-    var totalUrl = configService.makeUrl([configService.server_base_url ,'getcompany_total']);
-    configService.makeHttpRequest(totalUrl, function(result){
+    companyService.getCompanyTotal(options, function getCompanyTotalCallback(result){
         if(result.error){
             $scope.error =  result.statusText;
         }
         else {           
             $scope.cursor_total = result.cursor_total;       
         }
-    });
+    });     
 
     $scope.showMore = function(){
+        var options = {
+            skip : $scope.cursor_skip,
+            limit : $scope.cursor_limit
+        };
+
+        if($scope.search){
+            options.search = $scope.search;
+        }
+
         if(!$scope.stopScrolling){
-            url = configService.makeUrl([configService.server_base_url ,'getcompany', $scope.cursor_skip, $scope.cursor_limit]);
-            configService.makeHttpRequest(url, function(result){
+            companyService['getCompany'](options , function showMoreCallback(result){
                 if(result.error){
                     $scope.error =  result.statusText;
                 }
@@ -114,12 +148,44 @@ ih_app.controller('viewController', ['$scope', 'configService', function ($scope
                     if(result.length == 0){
                         $scope.stopScrolling = !0;
                     }
-                    $scope.companies = $scope.companies.concat(result);      
+                    $scope.companies = $scope.companies.concat(result);       
                 }
-            });
-        }
-        
+            });            
+        }        
     };
-    
 
+    $scope.initSearch = function(){                
+        $scope.cursor_skip = 0;
+        $scope.cursor_limit = 200;
+        $scope.stopScrolling = !1;
+        $scope.cursor_total = 0;
+        $scope.companies = [];
+        var options = {
+            skip : $scope.cursor_skip,
+            limit : $scope.cursor_limit
+        };
+
+        if($scope.search){
+            options.search = $scope.search;
+        }
+
+        companyService['getCompany'](options, function getCompanyCallback(result){
+            if(result.error){
+                $scope.error =  result.statusText;
+            }
+            else {         
+                $scope.cursor_skip = result.length;
+                $scope.companies = $scope.companies.concat(result);       
+            }
+        });
+
+        companyService['getCompanyTotal'](options, function getCompanyTotalCallback(result){
+            if(result.error){
+                $scope.error =  result.statusText;
+            }
+            else {           
+                $scope.cursor_total = result.cursor_total;       
+            }
+        });              
+    }
 }]);
