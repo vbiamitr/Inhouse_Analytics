@@ -77,11 +77,27 @@ router.get('/getcompany/:skip/:limit/:search', function (req, res, next) {
 
     MongoClient.connect(conf.url, function(err, db) {
         var collection_name = 'company';
-        var query = { 
-            find: {$text:{$search: req.params.search}}, 
+        var search = req.params.search;
+        var query = {
             skip: Number(req.params.skip),
             limit: Number(req.params.limit)
         };
+        try {
+            search = JSON.parse(search);
+        }
+        catch(e){}
+
+        if(typeof search == "string"){
+            query.find = {$text:{$search: req.params.search}};
+        }
+        else {
+            var q_obj = {};
+            for (var key in search) {
+                q_obj[key] = {$regex: new RegExp('^' + search[key], 'i')};
+            }
+            query.find = q_obj;
+        }
+        
         crud.find(db,collection_name,query,function(docs){
             if(docs && docs.length){
                  res.json(docs);
@@ -98,10 +114,24 @@ router.get('/getcompany/:skip/:limit/:search', function (req, res, next) {
 router.get('/getcompany_total/:search', function (req, res, next) {
 
     MongoClient.connect(conf.url, function(err, db) {
-        var collection_name = 'company';
-        var query = { 
-             find: {$text:{$search: req.params.search}}           
-        };
+        var collection_name = 'company';       
+        var search = req.params.search;
+        var query = {};
+        try {
+            search = JSON.parse(search);
+        }
+        catch(e){}
+
+        if(typeof search == "string"){
+            query.find = {$text:{$search: req.params.search}};
+        }
+        else {
+            var q_obj = {};
+            for (var key in search) {
+                q_obj[key] = {$regex: new RegExp('^' + search[key], 'i')};
+            }
+            query.find = q_obj;
+        }
         crud.count(db,collection_name,query,function(count){
             if(typeof count != "undefined"){
                  res.json({cursor_total: count});

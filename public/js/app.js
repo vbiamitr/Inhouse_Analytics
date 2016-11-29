@@ -234,6 +234,7 @@ ih_app.controller('viewController', ['$scope', 'companyService', function ($scop
                 search_obj[field.key] = val;
             }
         });
-        console.log(JSON.stringify(search_obj));
+        $scope.search = JSON.stringify(search_obj);
+        $scope.initSearch();
     }
 }]);
