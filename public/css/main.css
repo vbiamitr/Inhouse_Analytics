@@ -78,3 +78,50 @@ a, .field-label {
 .adv_submit{
     text-align: right;
 }
+
+.sidebar {
+    padding-left : 10px;
+    width:500px;
+    float: left;
+}
+.upload-body {
+    margin-left:525px;
+    display: block;
+    margin-bottom :10px;
+    padding-right: 10px;
+    height: auto;
+}
+
+.span-file-name {
+    display: inline-block;
+    width : 280px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+}
+.span-file-name p {
+    margin : 0px;
+}
+
+.file-created {
+    font-size: 10px;    
+}
+
+.file-action-btn {    
+    height : 100%;
+}
+.file_list-body{
+    height: calc(100vh - 140px);
+    overflow-y: auto; 
+}
+
+.file-upload-panel-body{
+    height: calc(100vh - 140px);
+    overflow-y: auto; 
+}
+.file-icon {
+    content: url("/public/img/xlsx-3.png");
+    width:25px;
+    height:auto;    
+}

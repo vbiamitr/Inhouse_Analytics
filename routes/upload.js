@@ -69,4 +69,16 @@ router.post('/xlsx', upload.any(), function (req, res, next) {
 
 });
 
+router.get('/getCompanyFiles', function (req, res, next) {
+    const companyDir = path.join( __dirname, '../uploads' );
+    const fs = require('fs');
+    fs.readdir(companyDir, (err, files) => {
+        if(err){
+            console.log(err);
+        }
+        files.reverse();
+        res.json({files:files});
+    });
+});
+
 module.exports = router;
