@@ -75,24 +75,48 @@ module.exports = {
     },
     insertIfNotExistUnorderedBulkOperation : function(db, collection_name, query, cb){
         var collection = db.collection(collection_name),
-            batch = collection.initializeUnorderedBulkOp({useLegacyOps: true}),
+           // batch = collection.initializeOrderedBulkOp(),
             columns = query.columns,
             qfind = {},
             l_doc = {},
             l_key = '';        
-        query.docs.forEach(function(doc){
-            l_doc = {};
-            columns.forEach(function(col){
-                l_doc[col] = doc[col] || '';
-            });
-                       
-            if(l_doc[query.find]){
-                qfind[query.find] = l_doc[query.find];
-                batch.find(qfind).upsert().updateOne({$setOnInsert : l_doc});
-            }            
-        });
-        batch.execute(function(err, result){
-            cb();
-        });
+        var docs_to_save = query.docs;
+        var insert_arr = [];
+
+        // Recursive function to check if the record exist then update otherwise push the record to insert Array.
+        function checkDocsToInsertOrUpdate(docs) {
+            if (docs_to_save.length) {
+                var doc = docs_to_save.shift();
+                l_doc = {};
+                columns.forEach(function (col) {
+                    if(typeof doc[col] != "undefined"){
+                        l_doc[col] = doc[col];
+                    }                     
+                });
+                if (l_doc[query.find]) {
+                    qfind[query.find] = l_doc[query.find];
+                    collection.updateOne(qfind,{ $set: l_doc }, function(err, result){
+                        if(!result.result.n){
+                            insert_arr.push(l_doc);
+                        }
+                        checkDocsToInsertOrUpdate(docs);
+                    });                    
+                }
+                else {
+                    checkDocsToInsertOrUpdate(docs);
+                }
+            }
+            else {
+                if(insert_arr.length){
+                    collection.insertMany(insert_arr, function(err, result){                        
+                        cb();
+                    });
+                }
+                else{
+                    cb();
+                }                                             
+            }
+        }
+        checkDocsToInsertOrUpdate(docs_to_save);
     }
 }
