@@ -14,6 +14,7 @@ angular.module('uploadCompanyControllerModule',[])
                 }).then(function (response) {
                     $timeout(function () {
                         $scope.result = response.data;
+                        $scope.getCompanyFiles();
                     });
                 }, function (response) {
                     if (response.status > 0) {
@@ -32,16 +33,26 @@ angular.module('uploadCompanyControllerModule',[])
             }
         };
 
+        $scope.selectFile = function(file){
+            $scope.selectedFile = file.originalfile;
+        }
+
         $scope.deleteFile = function(file){
-            
+            var url = utilityService.server_base_url + '/uploads/deletefile/' + file;
+            utilityService.makeHttpRequest(url, function(result){
+                console.log(result);
+                $scope.getCompanyFiles();
+            });
         };
 
         $scope.downloadFile = function(file){
-            
+            var url = utilityService.server_base_url + '/uploads/downloadfile/' + file;
+            var downloadframe = angular.element( document.querySelector( '#download_frame' ) );
+            downloadframe.attr('src',url);            
         }
 
         $scope.getCompanyFiles = function(){
-            var url = utilityService.server_base_url + '/uploads/getCompanyFiles';
+            var url = utilityService.server_base_url + '/uploads/getcompanyfiles';
             utilityService.makeHttpRequest(url, function(result){
                 //$scope.savedfiles = result.files;
                 var files_dict = [];
@@ -60,6 +71,5 @@ angular.module('uploadCompanyControllerModule',[])
                 $scope.savedfiles = files_dict;
             });
         };
-
         $scope.getCompanyFiles();       
     }]);

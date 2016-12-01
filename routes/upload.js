@@ -69,7 +69,7 @@ router.post('/xlsx', upload.any(), function (req, res, next) {
 
 });
 
-router.get('/getCompanyFiles', function (req, res, next) {
+router.get('/getcompanyfiles', function (req, res, next) {
     const companyDir = path.join( __dirname, '../uploads' );
     const fs = require('fs');
     fs.readdir(companyDir, (err, files) => {
@@ -79,6 +79,46 @@ router.get('/getCompanyFiles', function (req, res, next) {
         files.reverse();
         res.json({files:files});
     });
+});
+
+router.get('/deletefile/:file', function (req, res, next) {
+    var file = req.params.file;
+    var status = {};
+    const fs = require('fs');
+    const companyDir = path.join( __dirname, '../uploads' );    
+    if(file){       
+        fs.unlink(path.join(companyDir, file), function(err){
+            if(err){
+                console.error(err);
+                status.error = err;                
+            }
+            else {
+                status.status = "File deleted successfully";
+            }
+            res.json(status);
+            
+        })
+    }
+    else
+    {
+        status.status = "No file to delete";
+        res.json(status);
+    }    
+});
+
+router.get('/downloadfile/:file', function (req, res, next) {
+    var file = req.params.file;
+    var status = {};
+    const fs = require('fs');
+    const companyDir = path.join( __dirname, '../uploads' );     
+    var filename = file;
+    var ext_i = filename.lastIndexOf('.');
+    var tmp_i = filename.lastIndexOf('_');       
+    var newfilename = filename.substring(0, tmp_i) +  filename.substring(ext_i);     
+    res.download(path.join(companyDir, file),newfilename, function(err){
+        console.error(err);
+        res.status(404).end();
+    });      
 });
 
 module.exports = router;

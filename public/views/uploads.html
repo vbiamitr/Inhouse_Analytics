@@ -8,7 +8,7 @@
                 
                 <div class="panel-body file_list-body" scrolly="showMore()">
                     <ul class="list-group saved-files">
-                        <li class="list-group-item" ng-repeat="file in savedfiles">
+                        <li class="list-group-item" ng-repeat="file in savedfiles" ng-click="selectFile(file)" ng-class="{ active : selectedFile === file.originalfile}">
                             <div class="input-group">
                                 <img class="file-icon"></img>
                                 <span class="span-file-name" title="{{file.name}}" >
@@ -26,6 +26,7 @@
                 </div>
                 
             </div>
+            <iframe id="download_frame" style="display:none;"></iframe>
         </div>
         <div class="upload-body">
             <div class="panel panel-primary">
