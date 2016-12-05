@@ -8,7 +8,8 @@ angular.module('viewCompanyControllerModule',[])
         $scope.companyInfo = {};
         $scope.showInfo = false;
         $scope.selectedCompany = "";
-        $scope.fields = companyService.fields;
+        $scope.colsw = 100;
+        $scope.fields = companyService.fields;        
         var options = {
             skip : $scope.cursor_skip,
             limit : $scope.cursor_limit

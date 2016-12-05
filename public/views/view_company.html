@@ -1,6 +1,6 @@
-<div class="vc_container container-fluid" ng-controller="viewCompanyController">
-    <div class="row">
-        <div class="col-sm-2 col-xs-2">
+<div class="vc_container" ng-controller="viewCompanyController">
+    
+        <div class="adv-search-div">
             <div class="panel panel-default">
                 <div class="panel-heading vc-advsearch-pnl-heading">
                     <h3 class="panel-title">Advanced Search</h3>
@@ -96,7 +96,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-4 col-sx-4">
+        <div class="company-crosstab-div">
             <div class="input-group">
                 <input ng-model="search" type="text" class="form-control" placeholder="Search for...">
                 <span class="input-group-btn">
@@ -108,18 +108,32 @@
                 <div class="panel-heading">
                     <h3 class="panel-title">Companies</h3>
                 </div>
-                <div class="panel-body vc_company_list" scrolly="showMore()">
-                    <div class="list-group">
+                <div class="panel-body vc_company_list">
+                    <table id="company_tbl" companytbl colswidth="colsw">
+                        <thead class="thead-inverse">
+                            <tr>
+                                <th style="width:{{colsw + 'px'}}" ng-repeat="field in fields"> {{field.name}}</th>                            
+                            </tr>
+                        </thead>
+                        <tbody scrolly="showMore()">
+                            <tr ng-repeat="company in companies">
+                                <td style="width:{{colsw + 'px'}}" ng-repeat="field in fields"> {{company[field.key]}}</td>                            
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p class="list-status"> Showing {{cursor_skip}} of {{cursor_total}} </p>
+
+
+                    <!--<div class="list-group">
                         <a class="list-group-item" ng-repeat="company in companies" ng-click="getInfo(company)" ng-class="{ active : selectedCompany === company.domain}">
                             <h4 class="list-group-item-heading"> {{company.company}} </h4>
                             <p class="list-group-item-text">{{company.city}}, {{company.state}}, {{company.country}}</p>
                         </a>
-                    </div>
-                </div>
-                <p class="list-status"> Showing {{cursor_skip}} of {{cursor_total}} </p>
+                    </div> -->
+                </div>                
             </div>
         </div>
-        <div class="col-sm-6 col-xs-6">
+      <!-- <div class="col-sm-6 col-xs-6">
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     <h3 class="panel-title">Company Info</h3>
@@ -131,24 +145,6 @@
                     </dl>
                 </div>
             </div>
-        </div>
-    </div>
-    <div id="advancedSearchModal" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Advanced Search</h4>
-                </div>
-                <div class="modal-body">
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">Submit</button>
-                    <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">Clear</button>
-                </div>
-            </div>
-        </div>
-    </div>
+        </div> -->
+       
 </div>

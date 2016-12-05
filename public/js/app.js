@@ -37,4 +37,27 @@ angular.module('ih_app', [
             });
         }
     };
-});
+})
+
+.directive('companytbl', ['$window', function($window){
+    return {
+        restrict : 'A',
+        scope:{
+           colswidth: '=' 
+        },
+        link: function(scope, element, attrs){          
+               var tblWidth = element.width();
+                var cols = 13;                
+                scope.colswidth = tblWidth / cols;
+                angular.element($window).bind('load resize', function(){                    
+                    var tblWidth = element.width();
+                    var cols = 13;                
+                    scope.colswidth = tblWidth / cols;
+                    angular.element("th, td").css({
+                        width : scope.colswidth + 'px'
+                    });
+                    scope.$digest();
+                });
+        }
+    }
+}]);

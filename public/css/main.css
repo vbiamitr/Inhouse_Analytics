@@ -28,8 +28,7 @@
 }
 
 .vc_company_list {
-    height: calc(100vh - 220px);
-    overflow-y: auto;    
+    height: calc(100vh - 175px);       
 }
 
 .company-panel {
@@ -40,6 +39,7 @@
     color: #999999;
     text-align: right;
     margin-right: 35px;
+    padding-top: 5px;
 }
 
 .search-icon{
@@ -86,10 +86,8 @@ a, .field-label {
 }
 .upload-body {
     margin-left:525px;
-    display: block;
-    margin-bottom :10px;
-    padding-right: 10px;
-    height: auto;
+    display: block;    
+    padding-right: 10px;    
 }
 
 .span-file-name {
@@ -125,3 +123,51 @@ a, .field-label {
     width:25px;
     height:auto;    
 }
+
+.adv-search-div{
+    width : 300px;     
+    padding-left:10px;
+    float: left;  
+}
+.company-crosstab-div{
+    margin-left : 325px;    
+    display: block;
+    padding-right : 10px;
+}
+
+table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+th, td {
+    display: block;
+    float: left;
+    padding: 8px;
+    text-align: left;
+    word-wrap: break-word;    
+  }
+
+thead {
+    background-color: #333;
+    color: #FDFDFD;
+}
+thead tr {
+    display: block;
+    width: 100%;
+    position: relative;
+}
+
+tbody {
+    display: block;
+    overflow: auto;
+    width: 100%;
+    height: calc(100vh - 250px);    
+}
+
+tbody tr:nth-child(even) {
+    background-color:  #DDD;
+}
+
+
