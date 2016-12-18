@@ -47,26 +47,37 @@ module.exports = {
     find : function(db, collection_name, query, cb){
         var collection = db.collection(collection_name);
         if(query.skip && query.limit){
-            collection.find(query.find).skip(query.skip).limit(query.limit).toArray(function(err, docs){
+            collection.find(query.find, query.projection ? query.projection : {} ).skip(query.skip).limit(query.limit).toArray(function(err, docs){
+                console.log(err);
                 cb(docs);
             });
         }
         else if(query.skip){
-            collection.find(query.find).skip(query.skip).toArray(function(err, docs){
+            collection.find(query.find, query.projection ? query.projection : {}).skip(query.skip).toArray(function(err, docs){
+                console.log(err);
                 cb(docs);
             });
         }
         else if(query.limit){
-             collection.find(query.find).limit(query.limit).toArray(function(err, docs){
+             collection.find(query.find, query.projection ? query.projection : {}).limit(query.limit).toArray(function(err, docs){
+                console.log(err);
                 cb(docs);
             });
         }
         else{
-            collection.find(query).toArray(function(err, docs){
+            collection.find(query.find, query.projection ? query.projection : {}).toArray(function(err, docs){
+                console.log(err);
                 cb(docs);
             });
         }        
-    },    
+    }, 
+    findOne : function(db, collection_name, query, cb){
+        var collection = db.collection(collection_name);
+        collection.findOne(query.find, query.projection ? query.projection : {}, function(err, doc){
+            console.log(err);
+            cb(doc);
+        });
+    },   
     upsert: function(db, collection_name, query, cb){
         var collection = db.collection(collection_name);
         collection.updateOne(query[0], query[1], {upsert: true},function(err, r){
@@ -118,5 +129,14 @@ module.exports = {
             }
         }
         checkDocsToInsertOrUpdate(docs_to_save);
+    },
+    buildProjectionQuery : function(projection_params){
+        var query = {};
+        var projection_arr = projection_params.split(',');
+        for(var i=0, len=projection_arr.length; i<len; i++){
+            query[projection_arr[i]] = 1;
+        }
+        return query;
     }
+
 }

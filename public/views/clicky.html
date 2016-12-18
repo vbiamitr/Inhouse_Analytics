@@ -1,0 +1,181 @@
+<div class="vc_container" ng-controller="clickyController">
+    
+        <div class="adv-search-div">
+            <div class="panel panel-default">
+                <div class="panel-heading vc-advsearch-pnl-heading">
+                    <h3 class="panel-title">Advanced Search</h3>
+                </div>
+                <div class="panel-body vc-advsearch-pnl-body">
+                    <div class="form-group">
+                        <label class="control-label" for="input_company">Company:</label>
+                        <input type="text" class="form-control form-control-sm"  ng-model="input_company" placeholder="">
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label " for="input_domain">Domain:</label>
+
+                        <input type="text" class="form-control form-control-sm" ng-model="input_domain" placeholder="">
+
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label " for="input_address">Address:</label>
+
+                        <input type="text" class="form-control form-control-sm" ng-model="input_address" placeholder="">
+
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label " for="input_city">City:</label>
+
+                        <input type="text" class="form-control form-control-sm" ng-model="input_city" placeholder="">
+
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label " for="input_state">State:</label>
+
+                        <input type="text" class="form-control form-control-sm" ng-model="input_state" placeholder="">
+
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label " for="input_zipcode">Zipcode:</label>
+
+                        <input type="text" class="form-control form-control-sm" ng-model="input_zipcode" placeholder="">
+
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label " for="input_country">Country:</label>
+
+                        <input type="text" class="form-control form-control-sm" ng-model="input_country" placeholder="">
+
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label " for="input_industry">Industry:</label>
+
+                        <input type="text" class="form-control form-control-sm" ng-model="input_industry" placeholder="">
+
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label " for="input_sic_code">SIC Code:</label>
+
+                        <input type="text" class="form-control form-control-sm" ng-model="input_sic_code" placeholder="">
+
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label " for="input_revenue">Revenue:</label>
+
+                        <select class="form-control form-control-sm" ng-model="input_revenue">
+                                    <option value="">None</option>                                        
+                                    <option value="500 to 1000">500 to 1000</option>
+                                    <option value="Above 1000">Above 1000</option>
+                                </select>
+
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label " for="input_employees">Employees:</label>
+
+                        <select class="form-control form-control-sm" ng-model="input_employees">
+                                    <option value="">None</option>                                        
+                                    <option value="500 to 1000">500 to 1000</option>
+                                    <option value="Above 1000">Above 1000</option>
+                                </select>
+
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label " for="input_software">Software:</label>
+
+                        <input type="text" class="form-control form-control-sm" ng-model="input_software" placeholder="">
+
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label " for="input_parent">Parent:</label>
+
+                        <input type="text" class="form-control form-control-sm" ng-model="input_parent" placeholder="">
+
+                    </div>
+                    <div class="form-group adv_submit">
+                        <button id="adv_submit" type="submit" class="btn btn-default btn-xs" ng-click="advancedSearch()">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="company-crosstab-div">
+            <div class="row">
+                <div class='col-sm-8'>
+                    <div class="input-group">
+                        <input ng-model="search" type="text" class="form-control" placeholder="Search for...">
+                        <span class="input-group-btn">
+                            <button title="Search" class="btn btn-default" type="button" ng-click="initSearch()"><span class="glyphicon glyphicon-search search-icon"></span></button>
+                        </span>
+                    </div>
+                </div>
+                <div class='col-sm-4'>                        
+                    <datetimepicker requireddate="date" getvisitors="getvisitorsbydate()"></datetimepicker>                        
+                </div>  
+           
+                <div class='col-sm-12'>
+                    <div class="panel panel-primary clicky-panel">
+                        <div class="panel-heading">                         
+                                <h3 class="panel-title">Companies</h3>                                         
+                        </div>
+                        <div class="panel-body vc_clicky_list">
+                            <table class="ih-table" id="company_tbl" companytbl colswidth="colsw" colfields="fields">
+                                <thead class="ih-thead">
+                                    <tr>
+                                        <th class="ih-th" style="width:{{colsw + 'px'}}" ng-repeat="field in fields"> {{field.name}}</th>                            
+                                    </tr>
+                                </thead>
+                                <tbody class="ih-tbody" scrolly="showMore()">
+                                    <tr ng-repeat="visitor in visitors" data-toggle="modal" data-target="#myModal" ng-click="getInfo(visitor._id)">
+                                        <td class="ih-td" style="width:{{colsw + 'px'}}" ng-repeat="field in fields"> {{visitor[field.key] || ''}}</td>                            
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <p class="list-status"> Showing {{cursor_skip}} of {{cursor_total}} </p>                            
+                        </div>                
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Details</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-6 visitor-info-div" ng-repeat="field in infoFields"> 
+                                <div class="visitors-info-label">{{field.name}}</div> 
+                                <div>{{visitorsInfo[field.key]}}</div>
+                            </div>                            
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 visitor-info-div"> <div class="visitors-info-label">Actions</div>
+                                <ul>
+                                    <li ng-repeat="action in visitorsInfo['actions']">
+                                        <p class="action-info" >{{action['action_title']}}</p>
+                                        <p>{{action['action_url']}}</p>
+                                    </li>
+                                </ul>
+                                
+                            </div>                            
+                        </div>
+                    </div>
+                    
+
+
+
+                    <!--
+                        <ul class="list-group">
+                        <li class="list-group-item" ng-repeat="(key, value) in visitorsInfo">{{key}} : {{value}}</li>
+                        
+                    </ul>
+                    -->
+                </div>                
+                </div>
+            </div>
+        </div>      
+       
+</div>

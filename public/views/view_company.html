@@ -109,15 +109,15 @@
                     <h3 class="panel-title">Companies</h3>
                 </div>
                 <div class="panel-body vc_company_list">
-                    <table id="company_tbl" companytbl colswidth="colsw">
-                        <thead class="thead-inverse">
+                    <table class="ih-table" id="company_tbl" companytbl colswidth="colsw" colfields="fields">
+                        <thead class="ih-thead ">
                             <tr>
-                                <th style="width:{{colsw + 'px'}}" ng-repeat="field in fields"> {{field.name}}</th>                            
+                                <th class="ih-th" style="width:{{colsw + 'px'}}" ng-repeat="field in fields"> {{field.name}}</th>                            
                             </tr>
                         </thead>
-                        <tbody scrolly="showMore()">
+                        <tbody class="ih-tbody" scrolly="showMore()">
                             <tr ng-repeat="company in companies">
-                                <td style="width:{{colsw + 'px'}}" ng-repeat="field in fields"> {{company[field.key]}}</td>                            
+                                <td class="ih-td" style="width:{{colsw + 'px'}}" ng-repeat="field in fields"> {{company[field.key]}}</td>                            
                             </tr>
                         </tbody>
                     </table>

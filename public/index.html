@@ -1,9 +1,8 @@
 <html ng-app="ih_app">
     <head>
         <title>In House Analytics</title>
-        <link href="/public/libs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-        <link href="/public/libs/datatables.net-dt/css/jquery.dataTables.min.css" rel="stylesheet">
-        <link href="/public/libs/datatables.net-fixedheader-dt/css/fixedHeader.dataTables.min.css" rel="stylesheet">
+        <link href="/public/libs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">    
+        <link href="/public/libs/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" rel="stylesheet">    
         <link href="/public/css/main.css" rel="stylesheet">        
     </head>
     <body>
@@ -23,8 +22,8 @@
                     <li class="dropdown" class="active">
                         <a class="dropdown-toggle" data-toggle="dropdown">Company <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#/upload/company">Add Company</a></li>
-                            <li><a href="#/view_company">View Company</a></li>                        
+                            <li><a href="#!/upload/company">Add Company</a></li>
+                            <li><a href="#!/view_company">View Company</a></li>                        
                         </ul>
                     </li>
                     <li>
@@ -34,7 +33,7 @@
                     <a href="#">Customers</a>
                     </li>    
                     <li>
-                    <a href="#">Clicky</a>
+                    <a href="#!/clicky">Clicky</a>
                     </li>
                     <li>
                     <a href="#/schema_settings">Settings</a>
@@ -46,16 +45,18 @@
         <div class="ng-view_div" ng-view></div>
         <script src="/public/libs/jquery/dist/jquery.min.js" type="text/javascript"></script>
         <script src="/public/libs/bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
+        <script src="/public/libs/moment/min/moment.min.js" type="text/javascript"></script>
+        <script src="/public/libs/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js" type="text/javascript"></script> 
         <script src="/public/libs/angular/angular.min.js" type="text/javascript"></script>
         <script src="/public/libs/angular-route/angular-route.min.js" type="text/javascript"></script>
         <script src="/public/libs/ng-file-upload/ng-file-upload.min.js" type="text/javascript"></script>
         <script src="/public/js/services/utilityService.js" type="text/javascript"></script>
         <script src="/public/js/services/companyService.js" type="text/javascript"></script>
+        <script src="/public/js/services/clickyService.js" type="text/javascript"></script>
         <script src="/public/js/controllers/viewCompanyController.js" type="text/javascript"></script>
         <script src="/public/js/controllers/uploadCompanyController.js" type="text/javascript"></script>
-        <script src="/public/js/controllers/settingsController.js" type="text/javascript"></script>
-        <script src="/public/libs/datatables.net/js/jquery.dataTables.min.js" type="text/javascript"></script>
-        <script src="/public/libs/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js" type="text/javascript"></script>
+        <script src="/public/js/controllers/settingsController.js" type="text/javascript"></script>   
+        <script src="/public/js/controllers/clickyController.js" type="text/javascript"></script>               
         <script src="/public/js/app.js" type="text/javascript"></script>
     </body>
 </html>

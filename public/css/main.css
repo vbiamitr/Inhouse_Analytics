@@ -28,10 +28,18 @@
 }
 
 .vc_company_list {
-    height: calc(100vh - 175px);       
+    height: calc(100vh - 190px);       
+}
+
+.vc_clicky_list {
+    height: calc(100vh - 190px);       
 }
 
 .company-panel {
+    margin-top: 20px;
+}
+
+.clicky-panel {
     margin-top: 20px;
 }
 
@@ -132,16 +140,16 @@ a, .field-label {
 .company-crosstab-div{
     margin-left : 325px;    
     display: block;
-    padding-right : 10px;
+    padding-right : 15px;
 }
 
-table {
+.ih-table {
     width: 100%;
     table-layout: fixed;
     border-collapse: collapse;
 }
 
-th, td {
+.ih-th, .ih-td {
     display: block;
     float: left;
     padding: 8px;
@@ -149,25 +157,37 @@ th, td {
     word-wrap: break-word;    
   }
 
-thead {
+.ih-thead {
     background-color: #333;
     color: #FDFDFD;
 }
-thead tr {
+.ih-thead tr {
     display: block;
     width: 100%;
     position: relative;
 }
 
-tbody {
+.ih-tbody {
     display: block;
     overflow: auto;
     width: 100%;
-    height: calc(100vh - 250px);    
+    height: calc(100vh - 265px);    
 }
 
-tbody tr:nth-child(even) {
+.ih-tbody tr:nth-child(even) {
     background-color:  #DDD;
 }
 
+.action-info {
+    margin-bottom : 1px;
+    font-size: 15px;
+}
+
+.visitor-info-div {
+    padding: 5px;
+}
+
+.visitors-info-label {    
+    font-weight: bold;    
+}
 

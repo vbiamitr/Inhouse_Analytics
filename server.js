@@ -4,6 +4,7 @@ var logger = require('morgan');
 var app = express();
 var index = require('./routes/index');
 var uploads = require('./routes/upload');
+var clicky = require('./routes/clicky');
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -12,6 +13,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/public', express.static(__dirname + '/public'));
 app.use('/', index);
 app.use('/uploads', uploads);
+app.use('/clicky', clicky);
 
 // Error Handling Middleware
 
