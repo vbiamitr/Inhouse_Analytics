@@ -32,14 +32,10 @@
 }
 
 .vc_clicky_list {
-    height: calc(100vh - 190px);       
+    height: calc(100vh - 150px);       
 }
 
 .company-panel {
-    margin-top: 20px;
-}
-
-.clicky-panel {
     margin-top: 20px;
 }
 
@@ -171,7 +167,7 @@ a, .field-label {
     display: block;
     overflow: auto;
     width: 100%;
-    height: calc(100vh - 265px);    
+    height: calc(100vh - 225px);    
 }
 
 .ih-tbody tr:nth-child(even) {
@@ -191,3 +187,17 @@ a, .field-label {
     font-weight: bold;    
 }
 
+.datetimepicker-container{
+    width: 120px;    
+    float: right;
+    display: inline-block;
+}
+
+.datetimepicker-container input{
+    padding : 1px 5px;
+    height : 25px;
+}
+
+.datetimepicker-container span{
+    padding : 1px 3px;
+}

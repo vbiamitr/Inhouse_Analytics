@@ -2,15 +2,14 @@ angular.module('clickyServiceModule',[])
     .factory('clickyService', ['$http', 'utilityService', function($http, utilityService){
         var service = {};
 
-        service.projection = ['_id','time_pretty', 'ip_address', 'organization', 'geolocation', 'country_code', 'hostname', 'session_id'];
+        service.projection = ['_id', 'ip_address', 'organization', 'geolocation', 'country_code', 'landing_page'];
 
-        service.fields = [ 
-                            { 'key' : 'time_pretty', 'name' : 'Time'}, 
-                            { 'key' : 'ip_address', 'name' : 'Ip Address'},
-                            { 'key' : 'organization', 'name' : 'Organization'},
-                            { 'key' : 'geolocation', 'name' : 'Geo Location'},
-                            { 'key' : 'country_code', 'name' : 'Country'},
-                            { 'key' : 'hostname', 'name' : 'Hostname'}
+        service.fields = [                             
+                            { 'key' : 'ip_address',     'name' : 'IP Address'},
+                            { 'key' : 'organization',   'name' : 'Organization'},
+                            { 'key' : 'geolocation',    'name' : 'Geo Location'},
+                            { 'key' : 'country_code',   'name' : 'Country'},
+                            { "key" : "landing_page",    "name" : "Landing Page"}
                         ];  
 
        service.infoFields = [
@@ -28,6 +27,15 @@ angular.module('clickyServiceModule',[])
            {"key" : "latitude",             "name" : "Latitude"},
            {"key" : "longitude",            "name" : "Longitude"}
            
+       ];
+
+       service.searchFields = [           
+           {"key" : "ip_address",           "name" : "IP Address"},
+           {"key" : "organization",         "name" : "Organization"},
+           {"key" : "landing_page",         "name" : "Landing Page"},           
+           {"key" : "geolocation",          "name" : "Geolocation"},
+           {"key" : "country_code",         "name" : "Country"},
+           {"key" : "actions",             "name" : "Actions"}         
        ];
 
        service.getVisitors = function(options, cb){        

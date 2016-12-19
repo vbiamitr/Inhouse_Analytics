@@ -67,12 +67,96 @@ router.get('/visitors-list-total/:date', function(req, res, next) {
  });
 });
 
+router.get('/visitors-list/:date/:projection/:skip/:limit/:search', function (req, res, next) {
+    var date = req.params['date'];
+    var projection_str = req.params['projection'];
+    var projectionQuery = crud.buildProjectionQuery(projection_str);
+    var query = {        
+        "projection" : projectionQuery,
+        "skip" : Number(req.params.skip),
+        "limit" : Number(req.params.limit)
+    };
+    var search = req.params.search;        
+    try {
+        search = JSON.parse(search);
+    }
+    catch(e){}
+
+    if(typeof search == "string"){
+        query.find = {"date" : date, $text:{$search: req.params.search}};
+    }
+    else {
+        query.find = {"date" : date };
+        for (var key in search) {            
+            if(key != "actions"){
+                query.find[key] = {$regex: new RegExp( search[key], 'i')};
+            }
+            else
+            {
+                query.find[key] = {$elemMatch: {action_title:{$regex: new RegExp( search[key], 'i')}}}
+            }            
+        }        
+    }      
+
+    MongoClient.connect(conf.clicky_url, function(err, db) {
+        var collection_name = 'vbi_visitors';       
+        crud.find(db,collection_name,query,function(docs){
+            if(docs && docs.length){
+                 res.json(docs);
+            }
+            else
+            {
+                res.json({ error: true , statusText: 'Could not retrieve data!' });
+            }           
+            db.close();
+        });
+    });      
+});
+
+router.get('/visitors-list-total/:date/:search', function (req, res, next) {
+    var date = req.params['date'];
+    var query = {};
+    var search = req.params.search;        
+    try {
+        search = JSON.parse(search);
+    }
+    catch(e){}
+
+    if(typeof search == "string"){
+        query.find = {"date" : date, $text:{$search: req.params.search}};
+    }
+    else {
+        query.find = {"date" : date };
+        for (var key in search) {
+            if(key != "actions"){
+                query.find[key] = {$regex: new RegExp( search[key], 'i')};
+            }
+            else
+            {
+                query.find[key] = {$elemMatch: {action_title:{$regex: new RegExp( search[key], 'i')}}}
+            } 
+        } 
+    }   
+    MongoClient.connect(conf.clicky_url, function(err, db) {
+        var collection_name = 'vbi_visitors';    
+        crud.count(db,collection_name,query,function(count){
+            if(typeof count != "undefined"){
+                    res.json({cursor_total: count});
+            }
+            else
+            {
+                res.json({ error: true , statusText: 'Could not retrieve data!' });
+            }           
+            db.close();
+        });
+    });
+});
+
 router.get('/visitor-info/:_id', function(req, res, next) {
   var _id = req.params['_id'];
   var query = { 
     "find" : {"_id" : new ObjectID(_id) }    
-  };
-  console.log("query=" + JSON.stringify(query));
+  };  
   MongoClient.connect(conf.clicky_url, function(err, db) {
     var collection_name = 'vbi_visitors';    
     crud.findOne(db,collection_name,query,function(doc){

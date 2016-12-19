@@ -5,6 +5,7 @@ angular.module('clickyControllerModule',[])
         $scope.colsw = 100;
         $scope.fields = clickyService.fields; 
         $scope.infoFields = clickyService.infoFields;
+        $scope.searchFields = clickyService.searchFields;
 
         function resetScopeVar(){
             $scope.cursor_skip = 0;
@@ -82,8 +83,7 @@ angular.module('clickyControllerModule',[])
             callVisitorMethods ();
         }
 
-        $scope.getInfo = function (_id){
-            console.log("_id=" + _id);
+        $scope.getInfo = function (_id){            
             $scope.visitorsInfo = {};
             clickyService.getVisitorInfo(_id, function getvisitorsInfoCallBack(result){
                 if(result.error){
@@ -97,15 +97,23 @@ angular.module('clickyControllerModule',[])
         }
 
         $scope.advancedSearch = function(){
-            var fields = $scope.fields;
+            var fields = $scope.searchFields;
             var search_obj = {};
             fields.forEach(function(field){
-                var val = $scope['input_' + field.key];
+                var val = angular.element("#input_" + field.key).val();
                 if(val){
                     search_obj[field.key] = val;
                 }
             });
-            $scope.search = JSON.stringify(search_obj);
+            if(Object.keys(search_obj).length){
+                $scope.search = JSON.stringify(search_obj);
+            }
+            else
+            {
+                $scope.search = "";
+            }
+            
+            console.log($scope.search);
             $scope.initSearch();
         }
 
