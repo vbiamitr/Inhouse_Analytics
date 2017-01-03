@@ -23,6 +23,7 @@
 .navbar-inverse .navbar-nav>.dropdown>a .caret { border-bottom-color: #999999}
 .navbar-inverse .navbar-nav>.dropdown>a:hover .caret { border-bottom-color: #ffffff}
 
+
 .ng-view_div {
     margin-top: 75px;
 }
@@ -201,3 +202,36 @@ a, .field-label {
 .datetimepicker-container span{
     padding : 1px 3px;
 }
+
+.ipc_left_div {
+    border-right : 1px solid #ccc;
+}
+
+.ipc_left_div, .ipc_right_div {
+    height : calc(100vh - 100px)
+}
+
+.header {
+    padding: 10px 10px 10px 0;
+    color : #333;
+    font-size: 20px;
+}
+.loading_dbip, .loading_iplocation {   
+    margin-top: 50px;  
+    width: 100%;
+    text-align : center;  
+}
+
+.info {
+    padding : 40px 0 0 0;
+}
+
+.ip_label {
+    font-weight: bold;
+    display: inline-block;
+    width: 100px;
+}
+.search-icon-ip {
+    font-size: 21px;
+}
+

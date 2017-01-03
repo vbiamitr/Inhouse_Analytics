@@ -7,7 +7,8 @@ angular.module('ih_app', [
     'viewCompanyControllerModule',
     'uploadCompanyControllerModule',
     'settingsControllerModule',
-    'clickyControllerModule'
+    'clickyControllerModule',
+    'ipCheckControllerModule'
 ])
 
 .config(function($routeProvider) {
@@ -27,6 +28,10 @@ angular.module('ih_app', [
     .when("/clicky", {
         templateUrl : "/public/views/clicky.html",
         controller: "clickyController"
+    })
+    .when("/ipcheck", {
+        templateUrl : "/public/views/ipcheck.html",
+        controller: "ipCheckController"
     })
     .otherwise("/");
 })

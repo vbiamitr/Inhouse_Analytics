@@ -5,6 +5,7 @@ var app = express();
 var index = require('./routes/index');
 var uploads = require('./routes/upload');
 var clicky = require('./routes/clicky');
+var ipcheck = require('./routes/ipcheck');
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -14,6 +15,7 @@ app.use('/public', express.static(__dirname + '/public'));
 app.use('/', index);
 app.use('/uploads', uploads);
 app.use('/clicky', clicky);
+app.use('/ipcheck', ipcheck);
 
 // Error Handling Middleware
 
