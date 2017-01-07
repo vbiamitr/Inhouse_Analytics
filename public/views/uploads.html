@@ -39,7 +39,7 @@
                             into database. </h4>
                         <h4>
                             <ul class="list-inline">
-                                <li class="list-inline-item" ng-repeat="field in fields"><span class="field-label" ng-click="getFieldInfo(field.key)"><strong ng-class="{ fieldactive: selectedField === field.key }">{{ field.key }}</strong></span>                            | </li>
+                                <li class="list-inline-item" ng-repeat="field in fields"><span class="field-label" ng-click="getFieldInfo(field)"><strong ng-class="{ fieldactive: selectedField === field }">{{ field }}</strong></span>                            | </li>
                             </ul>
                         </h4>
                         <p class="more-field-info">{{fieldInfo}}</p>

@@ -106,18 +106,27 @@
 
             <div class="panel panel-primary company-panel">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Companies</h3>
+                    <h3 class="panel-title">Companies <span ng-click="showFieldsConfig = !showFieldsConfig" ng-init="showFieldsConfig=false" class="glyphicon glyphicon-cog cog"></span></h3>  
+                    <div ng-show="showFieldsConfig" class="col-selection arrow_box shadow">
+                        <span ng-click="showFieldsConfig = !showFieldsConfig" class="glyphicon glyphicon-remove-circle col-selection-close"></span>
+                        <div class="checkbox" ng-repeat="(key,field) in fieldInfo">                            
+                            <label><input type="checkbox" class="field-chkbox" value="{{key}}" ng-checked="fields.indexOf(key)!=-1" >{{field.name}}</label>
+                        </div>
+                        <div class="col-selection-submit">
+                            <button ng-click="showConfiguredFields()"> Save </button>
+                        </div>
+                    </div>                  
                 </div>
                 <div class="panel-body vc_company_list">
                     <table class="ih-table" id="company_tbl" companytbl colswidth="colsw" colfields="fields">
                         <thead class="ih-thead ">
                             <tr>
-                                <th class="ih-th" style="width:{{colsw + 'px'}}" ng-repeat="field in fields"> {{field.name}}</th>                            
+                                <th class="ih-th" style="width:{{colsw + 'px'}}" ng-repeat="field in fields"> {{fieldInfo[field].name}}</th>                            
                             </tr>
                         </thead>
-                        <tbody class="ih-tbody" scrolly="showMore()">
+                        <tbody class="ih-tbody ih-tbody-company" scrolly="showMore()">
                             <tr ng-repeat="company in companies">
-                                <td class="ih-td" style="width:{{colsw + 'px'}}" ng-repeat="field in fields"> {{company[field.key]}}</td>                            
+                                <td class="ih-td" style="width:{{colsw + 'px'}}" ng-repeat="field in fields"> {{company[field]}}</td>                            
                             </tr>
                         </tbody>
                     </table>
@@ -146,5 +155,6 @@
                 </div>
             </div>
         </div> -->
+        
        
 </div>

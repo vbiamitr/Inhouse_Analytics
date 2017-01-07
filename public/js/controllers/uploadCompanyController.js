@@ -1,6 +1,6 @@
 angular.module('uploadCompanyControllerModule',[])
     .controller('uploadCompanyController', ['$scope', 'Upload', '$timeout', '$routeParams',  '$filter' , 'utilityService', 'companyService',  function ($scope, Upload, $timeout, $routeParams, $filter, utilityService, companyService) {
-        $scope.fields = companyService.fields;
+        $scope.fields = Object.keys(companyService.fieldInfo);
         var url = utilityService.server_base_url + '/uploads/xlsx';
         $scope.type = $routeParams.type;
         $scope.uploadFiles = function (files) {
@@ -28,7 +28,7 @@ angular.module('uploadCompanyControllerModule',[])
         };
         $scope.getFieldInfo = function(field){
             if(field && companyService.fieldInfo){
-                $scope.fieldInfo = companyService.fieldInfo[field] || '';
+                $scope.fieldInfo = companyService.fieldInfo[field].info || '';
                 $scope.selectedField = field;
             }
         };

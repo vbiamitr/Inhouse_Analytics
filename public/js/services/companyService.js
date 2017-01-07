@@ -2,23 +2,79 @@ angular.module('companyServiceModule',[])
     .factory('companyService', ['$http', 'utilityService', function($http, utilityService){
         var service = {};
 
-        service.fields = [{"key":"company","name":"Company"},{"key":"domain","name":"Domain"},{"key":"address","name":"Address"},{"key":"city","name":"City"},{"key":"state","name":"State"},{"key":"zipcode","name":"Zipcode"},{"key":"country","name":"Country"},{"key":"industry","name":"Industry"},{"key":"sic_code","name":"SIC Code"},{"key":"revenue","name":"Revenue"},{"key":"employees","name":"Employees"},{"key":"software","name":"Software"},{"key":"parent","name":"Parent"}];  
+        // fields to show
+        service.fields = ["company", "domain", "address", "city", "state", "country", "industry", "revenue", "employees", "software", "status"];
 
         service.fieldInfo = {
-            'company' : 'Name of the company',
-            'domain' : 'Domain name of the company',
-            'address' : 'Street Address of the company',
-            'city' : 'Name of the city',
-            'state' : 'Name of the state/province',
-            'zipcode' : 'Zip Code or Postal Code',
-            'country' : 'Name of the country',
-            'industry' : 'Type of industry',
-            'sic_code' : 'SIC (Standard Industrial Classification) code of the industry',
-            'revenue' : 'Revenue of the company',
-            'employees' : 'No. of employees in the company',
-            'software' : 'Softwares being used by the company.Eg. "BO,BI,BOBJ" ',
-            'parent' : 'The parent company'
-        };
+                    "company": {
+                        "name": "Company",
+                        "info": "Name of the company"
+                    },
+                    "domain": {
+                        "name": "Domain",
+                        "info": "Domain name of the company"
+                    },
+                    "address": {
+                        "name": "Address",
+                        "info": "Street Address of the company"
+                    },
+                    "city": {
+                        "name": "City",
+                        "info": "Name of the city"
+                    },
+                    "state": {
+                        "name": "State",
+                        "info": "Name of the state/province"
+                    },
+                    "zipcode": {
+                        "name": "Zipcode",
+                        "info": "Zip Code or Postal Code"
+                    },
+                    "country": {
+                        "name": "Country",
+                        "info": "Name of the country"
+                    },
+                    "industry": {
+                        "name": "Industry",
+                        "info": "Type of industry"
+                    },
+                    "sic_code": {
+                        "name": "SIC Code",
+                        "info": "SIC (Standard Industrial Classification) code of the industry"
+                    },
+                    "revenue": {
+                        "name": "Revenue",
+                        "info": "Revenue of the company"
+                    },
+                    "employees": {
+                        "name": "Employees",
+                        "info": "No. of employees in the company"
+                    },
+                    "software": {
+                        "name": "Software",
+                        "info": "Softwares being used by the company.Eg. \"BO,BI,BOBJ\" "
+                    },
+                    "parent": {
+                        "name": "Parent",
+                        "info": "The parent company"
+                    },
+                    "status": {
+                        "name": "Status",
+                        "info": "Client's Status"
+                    },
+                    "account_mgr": {
+                        "name": "Account Manager",
+                        "info": "Name of manager dealing with the client"
+                    },
+                    "ip_address": {
+                        "name": "IP Address",
+                        "info": "IP Address of the company"
+                    },
+                    "comment": {
+                        "name": "Comment",
+                        "info": "Comments"
+                    }
+            };
 
         service.getCompany = function(options, cb){        
             var urlParams = [utilityService.server_base_url ,'getcompany', options.skip, options.limit];

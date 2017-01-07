@@ -59,10 +59,13 @@ angular.module('ih_app', [
            colfields : '=' 
         },
         link: function(scope, element, attrs){          
-               var tblWidth = element.width();
-               tblWidth = tblWidth - 30;
-                                
-                scope.colswidth = tblWidth / scope.colfields.length;
+                
+                scope.$watch('colfields', function(newValue, oldValue){
+                    var tblWidth = element.width();
+                    tblWidth = tblWidth - 30;               
+                    scope.colswidth = tblWidth / scope.colfields.length;                    
+                });
+                
                 angular.element($window).bind('load resize', function(){                    
                     var tblWidth = element.width();
                      tblWidth = tblWidth - 30;               

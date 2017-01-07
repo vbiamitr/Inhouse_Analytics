@@ -44,7 +44,7 @@ router.get('/', function (req, res, next) {
 
 router.post('/xlsx', upload.any(), function (req, res, next) {
     if (req.files) {
-        var columns = ['company', 'domain', 'address', 'city', 'state', 'zipcode', 'country', 'industry', 'sic_code', 'revenue', 'employees', 'software', 'parent'];
+        var columns = ['company', 'domain', 'address', 'city', 'state', 'zipcode', 'country', 'industry', 'sic_code', 'revenue', 'employees', 'software', 'parent', 'status', 'account_mgr', 'ip_address'];
         for(var i=0;i<req.files.length;i++){
             var file = req.files[i];
             var workbook = X.readFile(file.path);

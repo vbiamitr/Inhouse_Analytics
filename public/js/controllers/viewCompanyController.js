@@ -1,5 +1,5 @@
 angular.module('viewCompanyControllerModule',[])
-    .controller('viewCompanyController', ['$scope', 'companyService', function ($scope, companyService) {
+    .controller('viewCompanyController', ['$scope', 'companyService', '$window', function ($scope, companyService, $window) {
         $scope.cursor_skip = 0;
         $scope.cursor_limit = 200;
         $scope.stopScrolling = !1;
@@ -9,7 +9,8 @@ angular.module('viewCompanyControllerModule',[])
         $scope.showInfo = false;
         $scope.selectedCompany = "";
         $scope.colsw = 100;
-        $scope.fields = companyService.fields;        
+        $scope.fields = companyService.fields;  
+        $scope.fieldInfo = companyService.fieldInfo;  
         var options = {
             skip : $scope.cursor_skip,
             limit : $scope.cursor_limit
@@ -116,5 +117,21 @@ angular.module('viewCompanyControllerModule',[])
             });
             $scope.search = JSON.stringify(search_obj);
             $scope.initSearch();
+        };
+
+        $scope.showConfiguredFields = function(){
+            $scope.showFieldsConfig = !$scope.showFieldsConfig;
+            var chkboxEle = angular.element(document.querySelectorAll(".field-chkbox:checked"));
+            var newFields = [];
+            chkboxEle.each(function(i){
+                newFields.push(chkboxEle[i].value);
+            });
+
+            if(newFields.join() !== $scope.fields.join()){            
+                $scope.fields.length = 0;
+                $scope.fields = $scope.fields.concat(newFields);
+                $scope.initSearch();
+            }                      
+            
         }
     }]);

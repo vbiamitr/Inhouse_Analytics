@@ -76,7 +76,7 @@
                                         <th class="ih-th" style="width:{{colsw + 'px'}}" ng-repeat="field in fields"> {{field.name}}</th>                            
                                     </tr>
                                 </thead>
-                                <tbody class="ih-tbody" scrolly="showMore()">
+                                <tbody class="ih-tbody ih-tbody-clicky" scrolly="showMore()">
                                     <tr ng-repeat="visitor in visitors" data-toggle="modal" data-target="#myModal" ng-click="getInfo(visitor._id)">
                                         <td class="ih-td" style="width:{{colsw + 'px'}}" ng-repeat="field in fields"> {{visitor[field.key] || ''}}</td>                            
                                     </tr>
