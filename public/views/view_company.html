@@ -6,90 +6,17 @@
                     <h3 class="panel-title">Advanced Search</h3>
                 </div>
                 <div class="panel-body vc-advsearch-pnl-body">
-                    <div class="form-group">
-                        <label class="control-label" for="input_company">Company:</label>
-                        <input type="text" class="form-control form-control-sm"  ng-model="input_company" placeholder="">
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label " for="input_domain">Domain:</label>
-
-                        <input type="text" class="form-control form-control-sm" ng-model="input_domain" placeholder="">
-
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label " for="input_address">Address:</label>
-
-                        <input type="text" class="form-control form-control-sm" ng-model="input_address" placeholder="">
-
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label " for="input_city">City:</label>
-
-                        <input type="text" class="form-control form-control-sm" ng-model="input_city" placeholder="">
-
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label " for="input_state">State:</label>
-
-                        <input type="text" class="form-control form-control-sm" ng-model="input_state" placeholder="">
-
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label " for="input_zipcode">Zipcode:</label>
-
-                        <input type="text" class="form-control form-control-sm" ng-model="input_zipcode" placeholder="">
-
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label " for="input_country">Country:</label>
-
-                        <input type="text" class="form-control form-control-sm" ng-model="input_country" placeholder="">
-
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label " for="input_industry">Industry:</label>
-
-                        <input type="text" class="form-control form-control-sm" ng-model="input_industry" placeholder="">
-
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label " for="input_sic_code">SIC Code:</label>
-
-                        <input type="text" class="form-control form-control-sm" ng-model="input_sic_code" placeholder="">
-
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label " for="input_revenue">Revenue:</label>
-
-                        <select class="form-control form-control-sm" ng-model="input_revenue">
-                                    <option value="">None</option>                                        
-                                    <option value="500 to 1000">500 to 1000</option>
-                                    <option value="Above 1000">Above 1000</option>
-                                </select>
-
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label " for="input_employees">Employees:</label>
-
-                        <select class="form-control form-control-sm" ng-model="input_employees">
-                                    <option value="">None</option>                                        
-                                    <option value="500 to 1000">500 to 1000</option>
-                                    <option value="Above 1000">Above 1000</option>
-                                </select>
-
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label " for="input_software">Software:</label>
-
-                        <input type="text" class="form-control form-control-sm" ng-model="input_software" placeholder="">
-
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label " for="input_parent">Parent:</label>
-
-                        <input type="text" class="form-control form-control-sm" ng-model="input_parent" placeholder="">
-
-                    </div>
+                    <table class="adv-search-field">
+                        <tr ng-repeat="field in fields">
+                            <td class="adv-search-field-label">
+                                <label  for="input_company">{{ fieldInfo[field].name }}</label>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control form-control-sm adv-search-input"  id="adv_input_{{field}}" placeholder="">
+                            </td>
+                        </tr>
+                    </table>   
+                   
                     <div class="form-group adv_submit">
                         <button id="adv_submit" type="submit" class="btn btn-default btn-xs" ng-click="advancedSearch()">Submit</button>
                     </div>
@@ -99,7 +26,7 @@
         <div class="company-crosstab-div">
             <div class="input-group">
                 <input ng-model="search" type="text" class="form-control" placeholder="Search for...">
-                <span class="input-group-btn">
+                <span class="input-group-btn search-input-group-btn">
                     <button title="Search" class="btn btn-default" type="button" ng-click="initSearch()"><span class="glyphicon glyphicon-search search-icon"></span></button>
                 </span>
             </div>
@@ -108,9 +35,9 @@
                 <div class="panel-heading">
                     <h3 class="panel-title">Companies <span ng-click="showFieldsConfig = !showFieldsConfig" ng-init="showFieldsConfig=false" class="glyphicon glyphicon-cog cog"></span></h3>  
                     <div ng-show="showFieldsConfig" class="col-selection arrow_box shadow">
-                        <span ng-click="showFieldsConfig = !showFieldsConfig" class="glyphicon glyphicon-remove-circle col-selection-close"></span>
+                        <span ng-click="showFieldsConfig = !showFieldsConfig" class="glyphicon glyphicon-remove col-selection-close"></span>
                         <div class="checkbox" ng-repeat="(key,field) in fieldInfo">                            
-                            <label><input type="checkbox" class="field-chkbox" value="{{key}}" ng-checked="fields.indexOf(key)!=-1" >{{field.name}}</label>
+                            <label><input type="checkbox" class="field-chkbox" value="{{key}}" ng-checked="fields.indexOf(key)!=-1" ><span>{{field.name}}</span></label>
                         </div>
                         <div class="col-selection-submit">
                             <button ng-click="showConfiguredFields()"> Save </button>
@@ -124,37 +51,67 @@
                                 <th class="ih-th" style="width:{{colsw + 'px'}}" ng-repeat="field in fields"> {{fieldInfo[field].name}}</th>                            
                             </tr>
                         </thead>
-                        <tbody class="ih-tbody ih-tbody-company" scrolly="showMore()">
+                        <tbody class="ih-tbody ih-tbody-company">
                             <tr ng-repeat="company in companies">
                                 <td class="ih-td" style="width:{{colsw + 'px'}}" ng-repeat="field in fields"> {{company[field]}}</td>                            
                             </tr>
                         </tbody>
-                    </table>
-                    <p class="list-status"> Showing {{cursor_skip}} of {{cursor_total}} </p>
-
-
-                    <!--<div class="list-group">
-                        <a class="list-group-item" ng-repeat="company in companies" ng-click="getInfo(company)" ng-class="{ active : selectedCompany === company.domain}">
-                            <h4 class="list-group-item-heading"> {{company.company}} </h4>
-                            <p class="list-group-item-text">{{company.city}}, {{company.state}}, {{company.country}}</p>
-                        </a>
-                    </div> -->
+                    </table>      
+                </div>                              
+            </div>
+            <div class="table-status">                
+                    <ul class="pagination pagination-sm">
+                        <li class="page-item" ng-class="{'disabled' : page == 1 }" ng-click="showMore(page -1)">
+                        <span class="page-link" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                            <span class="sr-only">Previous</span>
+                        </span>
+                        </li>
+                        <li class="page-item pg" ng-repeat="p in pages" ng-class="{'pg-active' : page == p }" ng-click="showMore(p)"><span class="page-link">{{p}}</span></li>
+                        
+                        <li class="page-item" ng-class="{'disabled' : page == totalPages }" ng-click="showMore(page + 1)">
+                        <span class="page-link" href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                            <span class="sr-only">Next</span>
+                        </span>
+                        </li>
+                    </ul>
+                    <span class="list-status"> Showing {{ recordStart }} to {{ recordEnd }} of {{cursor_total}} </span>
+            </div> 
+        </div>
+      <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Details</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-6 visitor-info-div" ng-repeat="(key, info) in fieldInfo"> 
+                                <div class="visitors-info-label">{{info.name}}</div> 
+                                <div>{{visitorsInfo[field.key]}}</div>
+                            </div>                            
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 visitor-info-div"> <div class="visitors-info-label">Comments</div>
+                                <ul>
+                                    <li ng-repeat="action in visitorsInfo['actions']">
+                                        <p class="action-info" >{{action['action_title']}}</p>
+                                        <p>{{action['action_url']}}</p>
+                                    </li>
+                                </ul>
+                                
+                            </div>                            
+                        </div>
+                    </div>                    
                 </div>                
+                </div>
             </div>
         </div>
-      <!-- <div class="col-sm-6 col-xs-6">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Company Info</h3>
-                </div>
-                <div class="panel-body">
-                    <dl class="dl-horizontal company-info" ng-if="showInfo">
-                        <dt ng-repeat-start="field in fields">{{field.name}}</dt>
-                        <dd ng-repeat-end>{{companyInfo[field.key]}}</dd>
-                    </dl>
-                </div>
-            </div>
-        </div> -->
         
        
 </div>

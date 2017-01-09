@@ -22,14 +22,27 @@
 .navbar-inverse .navbar-nav>.dropdown>a:hover .caret { border-top-color: #ffffff}
 .navbar-inverse .navbar-nav>.dropdown>a .caret { border-bottom-color: #999999}
 .navbar-inverse .navbar-nav>.dropdown>a:hover .caret { border-bottom-color: #ffffff}
+.navbar-brand {
+    padding: 5px 15px;
+    height: 25px;
+}
+.navbar-nav>li>a {
+    padding: 5px 15px;
+}
+.navbar {
+    min-height: 25px;
+}
 
-
+body {
+    font-family: "Lato", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Verdana, Tahoma, sans-serif;
+    font-size: 100%;
+}
 .ng-view_div {
-    margin-top: 75px;
+    margin-top: 50px;
 }
 
 .vc_company_list {
-    height: calc(100vh - 190px);       
+    height: calc(100vh - 150px);       
 }
 
 .vc_clicky_list {
@@ -37,18 +50,23 @@
 }
 
 .company-panel {
-    margin-top: 20px;
+    margin-top: 15px;
 }
 
 .list-status{    
     color: #999999;
     text-align: right;
-    margin-right: 35px;
+    margin-right: 15px;
     padding-top: 5px;
+    float: right;
 }
 
 .search-icon{
-    font-size: 20px;
+    font-size: 13px;
+}
+
+.search-input-group-btn > button{
+    padding: 3px 7px;
 }
 
 a, .field-label {
@@ -69,19 +87,30 @@ a, .field-label {
 }
 
 .vc-advsearch-pnl-body {
-    font-size:12px;
+    font-size: 1em;
     background-color: #f5f5f5;
     overflow-y: auto;
     color: #999999;
 }
 
 .vc-advsearch-pnl-body .form-control {
-    height: 25px;
-    padding: 5px 5px;
+    height: 20px;
+    padding: 1px 3px;
     color: #999999;
+    font-size: 1em;
 }
 .adv_submit{
     text-align: right;
+    margin-top: 5px;
+    
+}
+
+.adv_submit > button{
+    font-size:x-small;
+}
+
+.adv-input {
+    font-size: 1em;
 }
 
 .sidebar {
@@ -130,26 +159,33 @@ a, .field-label {
 }
 
 .adv-search-div{
-    width : 300px;     
+    width : 250px;     
     padding-left:10px;
     float: left;  
 }
 .company-crosstab-div{
-    margin-left : 325px;    
+    margin-left : 275px;    
     display: block;
     padding-right : 15px;
+}
+.company-crosstab-div .form-control {
+    height: 20px;
+    padding: 1px 3px;
+    color: #999999;
+    font-size: 1em;
 }
 
 .ih-table {
     width: 100%;
     table-layout: fixed;
     border-collapse: collapse;
+    font-size: 1em;    
 }
 
 .ih-th, .ih-td {
     display: block;
     float: left;
-    padding: 8px;
+    padding: 4px;
     text-align: left;
     word-wrap: break-word;    
   }
@@ -158,6 +194,7 @@ a, .field-label {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    font-weight: normal;
   }
 
 .ih-thead {
@@ -182,7 +219,7 @@ a, .field-label {
 }
 
 .ih-tbody-company {
-    height: calc(100vh - 265px); 
+    height: calc(100vh - 180px); 
 }
 .ih-tbody-clicky {
     height: calc(100vh - 225px); 
@@ -248,31 +285,39 @@ a, .field-label {
     font-size: 21px;
 }
 .cog {
-    float: right;
-    font-size: 18px;
+    float: right;    
 }
 .cog:hover {
     cursor: pointer;
 }
 .col-selection-close {
-    font-size: 16px;    
+    font-size: 10px;
     float: right;
     margin-right: -10px;
     cursor: pointer;
+    color: #ccc;
+}
+.col-selection-close:hover {
+    color: #999999;
 }
 .col-selection-submit{
     text-align: center;
 }
 .col-selection-submit > button {
-    font-size: 12px;    
+    font-size: x-small;
+    padding: 0px 5px;
+}
+
+input[type=checkbox], input[type=radio] {
+    margin:2px 0 0;
 }
 .col-selection {    
     position: absolute;
     padding: 5px 15px 5px 15px;
     z-index: 999;
-    top: 75px;
-    right: 65px;   
-    color: #333; 
+    top: 50px;
+    right: 50px;   
+    color: #333;    
 }
 
 .shadow {
@@ -311,3 +356,54 @@ a, .field-label {
 	margin-top: -13px;
 }
 /* Callout */
+
+.panel-title {
+    font-size: 1.2em;    
+}
+.panel-heading, .panel-body {
+    padding : 5px 5px;
+}
+.adv-search-field{
+    font-size : 1em;
+    width: 100%;
+}
+
+.adv-search-field-label {    
+    width: 70px;
+}
+.adv-search-field-label > label {
+    font-weight:  normal;
+}
+.adv-search-field td {
+    padding: 5px 0;
+}
+
+.pagination-sm {
+    padding : 0;
+    margin:0;       
+}
+
+.pagination-sm  .page-link {
+    font-size : 0.8em;
+    cursor: pointer;
+}
+
+.panel{
+    margin-bottom: 3px;
+}
+
+.pagination > .pg > span {
+    color: #999999;
+}
+
+.pagination > .pg-active > span {
+    color: #337ab7;
+}
+
+.dropdown-menu {
+    font-size: 1em;
+}
+
+.navbar-brand {
+    font-size: 1.5em;
+}
