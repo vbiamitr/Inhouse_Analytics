@@ -1,6 +1,7 @@
 var express = require('express');
 var path = require('path');
 var MongoClient = require('mongodb').MongoClient;
+var ObjectID = require('mongodb').ObjectID;
 var conf = require('../config/db');
 var crud = require('../models/crud');
 var router = express.Router();
@@ -145,4 +146,48 @@ router.get('/getcompany_total/:search', function (req, res, next) {
     });   
 });
 
+router.get('/getcompany-info/:_id', function(req, res, next) {
+  var _id = req.params['_id'];
+  var query = { 
+    "find" : {"_id" : new ObjectID(_id) }    
+  };  
+  MongoClient.connect(conf.url, function(err, db) {
+    var collection_name = 'company';    
+    crud.findOne(db,collection_name,query,function(doc){
+        if(doc){
+            res.json(doc);
+        }
+        else
+        {
+            res.json({ error: true , statusText: 'Could not retrieve data!' });
+        }           
+        db.close();
+    });
+ });
+});
+
+
+router.get('/updatecompany-info/:_id/:field/:value', function(req, res, next) {
+  var _id = req.params['_id'];
+  var field = req.params['field'];
+  var value = req.params['value'];
+  var query = [
+      {"_id" : new ObjectID(_id) },
+      {$set:{}}
+  ];
+  query[1]['$set'][field] = value; 
+  MongoClient.connect(conf.url, function(err, db) {
+    var collection_name = 'company';    
+    crud.updateOne(db,collection_name,query,function(doc){
+        if(doc){
+            res.json(doc);
+        }
+        else
+        {
+            res.json({ error: true , statusText: 'Could not save data!' });
+        }           
+        db.close();
+    });
+ });
+});
 module.exports = router;

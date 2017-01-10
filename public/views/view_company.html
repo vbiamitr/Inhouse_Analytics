@@ -52,8 +52,8 @@
                             </tr>
                         </thead>
                         <tbody class="ih-tbody ih-tbody-company">
-                            <tr ng-repeat="company in companies">
-                                <td class="ih-td" style="width:{{colsw + 'px'}}" ng-repeat="field in fields"> {{company[field]}}</td>                            
+                            <tr ng-repeat="company in companies" data-toggle="modal" data-target="#myModal" ng-click="getInfo(company._id)">
+                                <td class="ih-td" style="width:{{colsw + 'px'}}" ng-repeat="field in fields" id="{{company._id + '_' + field}}" > {{company[field]}}</td>                            
                             </tr>
                         </tbody>
                     </table>      
@@ -86,22 +86,27 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
-                    <h4 class="modal-title" id="myModalLabel">Details</h4>
+                    <h4 class="modal-title" id="myModalLabel">Details </h4>
+                    
                 </div>
                 <div class="modal-body">
                     <div class="container-fluid">
                         <div class="row">
-                            <div class="col-md-6 visitor-info-div" ng-repeat="(key, info) in fieldInfo"> 
-                                <div class="visitors-info-label">{{info.name}}</div> 
-                                <div>{{visitorsInfo[field.key]}}</div>
+                            <div class="col-md-6 info-div" ng-repeat="(key, info) in fieldInfo" ng-if="key != 'comment'"> 
+                                <div class="info-label">{{info.name}}</div> 
+                                <div class="info-data" title="Click to edit" >
+                                    <input type="text" id="{{key}}" value="{{companyInfo[key]}}" disabled> 
+                                    <span ng-click="allowEditing(key)" class="glyphicon glyphicon-pencil info-editsave-btn"></span>
+                                    <span ng-click="saveEditing(key)" class="glyphicon glyphicon-floppy-disk info-editsave-btn"></span>                                    
+                                </div>
                             </div>                            
                         </div>
                         <div class="row">
-                            <div class="col-md-12 visitor-info-div"> <div class="visitors-info-label">Comments</div>
+                            <div class="col-md-12 info-div"> <div class="info-label">Comments</div>
                                 <ul>
-                                    <li ng-repeat="action in visitorsInfo['actions']">
-                                        <p class="action-info" >{{action['action_title']}}</p>
-                                        <p>{{action['action_url']}}</p>
+                                    <li ng-repeat="comment in companyInfo['comment']">
+                                        <p class="action-info" >{{comment['text']}}</p>
+                                        <p>{{comment['time']}}</p>
                                     </li>
                                 </ul>
                                 

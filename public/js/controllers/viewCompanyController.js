@@ -55,7 +55,8 @@ angular.module('viewCompanyControllerModule',[])
             else {         
                 $scope.cursor_skip = result.length;
                 $scope.companies.length = 0;
-                $scope.companies = $scope.companies.concat(result);       
+                $scope.companies = $scope.companies.concat(result);  
+                updatePages();     
             }
         });  
 
@@ -141,10 +142,17 @@ angular.module('viewCompanyControllerModule',[])
             });              
         }
 
-        $scope.getInfo = function (company){
-            $scope.showInfo = true;
-            $scope.companyInfo = company;
-            $scope.selectedCompany = company.domain;
+        $scope.getInfo = function (_id){
+            $scope.companyInfo = {};
+            companyService.getCompanyInfo(_id, function getCompanyInfoCallBack(result){
+                if(result.error){
+                    $scope.error =  result.statusText;
+                }
+                else {                    
+                    $scope.companyInfo = result;  
+                    console.log($scope.companyInfo);     
+                }
+            });
         }
 
         $scope.advancedSearch = function(){
@@ -175,5 +183,29 @@ angular.module('viewCompanyControllerModule',[])
                 $scope.initSearch();
             }                      
             
+        }
+
+        $scope.allowEditing = function(eleId){
+            var ele = angular.element( document.querySelector( '#' + eleId ));            
+            ele.removeAttr('disabled');
+            ele.addClass('allow-edit');
+            ele.focus();
+        };
+
+        $scope.saveEditing = function(eleId){
+            var ele = angular.element( document.querySelector( '#' + eleId ));
+            var val = ele.val();
+            if($scope.companyInfo[eleId] !== val){
+                companyService.updateCompanyInfo($scope.companyInfo._id, eleId, val, function updateCompanyInfoCallback(result){
+                    if(result.error){
+                        $scope.error =  result.statusText;
+                    }
+                    else{
+                        ele = angular.element( document.querySelector( '#' + $scope.companyInfo._id + '_' + eleId ));
+                        ele.text(val);
+                        console.log("Saved");
+                    }
+                });
+            }
         }
     }]);

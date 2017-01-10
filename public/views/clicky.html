@@ -100,13 +100,13 @@
                 <div class="modal-body">
                     <div class="container-fluid">
                         <div class="row">
-                            <div class="col-md-6 visitor-info-div" ng-repeat="field in infoFields"> 
-                                <div class="visitors-info-label">{{field.name}}</div> 
+                            <div class="col-md-6 info-div" ng-repeat="field in infoFields"> 
+                                <div class="info-label">{{field.name}}</div> 
                                 <div>{{visitorsInfo[field.key]}}</div>
                             </div>                            
                         </div>
                         <div class="row">
-                            <div class="col-md-12 visitor-info-div"> <div class="visitors-info-label">Actions</div>
+                            <div class="col-md-12 info-div"> <div class="info-label">Actions</div>
                                 <ul>
                                     <li ng-repeat="action in visitorsInfo['actions']">
                                         <p class="action-info" >{{action['action_title']}}</p>

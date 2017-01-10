@@ -92,5 +92,15 @@ angular.module('companyServiceModule',[])
             utilityService.makeHttpRequest(utilityService.makeUrl(urlParams), cb);
         };
 
+        service.getCompanyInfo = function(_id, cb){
+            var urlParams = [utilityService.server_base_url ,'getcompany-info', _id];
+            utilityService.makeHttpRequest(utilityService.makeUrl(urlParams), cb);
+        }
+
+        service.updateCompanyInfo = function(_id, field,val, cb){
+            var urlParams = [utilityService.server_base_url ,'updatecompany-info', _id, field, val];
+            utilityService.makeHttpRequest(utilityService.makeUrl(urlParams), cb);
+        }
+
         return service;        
     }]);
