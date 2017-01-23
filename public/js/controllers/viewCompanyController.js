@@ -1,5 +1,5 @@
 angular.module('viewCompanyControllerModule',[])
-    .controller('viewCompanyController', ['$scope', 'companyService', '$window', function ($scope, companyService, $window) {
+    .controller('viewCompanyController', ['$scope', 'companyService', '$window', '$compile', function ($scope, companyService, $window, $compile) {
         var updatePages = function(){
             var totalPages = Math.floor($scope.cursor_total / $scope.cursor_limit) + 1;
             $scope.totalPages = totalPages;
@@ -195,17 +195,31 @@ angular.module('viewCompanyControllerModule',[])
         $scope.saveEditing = function(eleId){
             var ele = angular.element( document.querySelector( '#' + eleId ));
             var val = ele.val();
+            ele.attr('disabled', 'disabled');
             if($scope.companyInfo[eleId] !== val){
                 companyService.updateCompanyInfo($scope.companyInfo._id, eleId, val, function updateCompanyInfoCallback(result){
                     if(result.error){
                         $scope.error =  result.statusText;
                     }
                     else{
-                        ele = angular.element( document.querySelector( '#' + $scope.companyInfo._id + '_' + eleId ));
-                        ele.text(val);
+                        
+                        $( '#' + $scope.companyInfo._id + '_' + eleId ).text(val);      // tried to wrap it in angular element, but doesn't work                  
                         console.log("Saved");
                     }
                 });
             }
+        };
+
+        $scope.removeComments = function(){
+            var ul = $('#commentList'); 
+            ul.find('.list-group-item').remove();
+            /*var li = $compile('<listcomment ng-repeat="comment in companyInfo[\'comment\']"   commentobj="comment" docid="{{companyInfo[\'_id\']}}"></listcomment>')($scope); 
+            ul.append(li);*/
+        };        
+
+        $scope.appendComment = function(_id){
+            var ul = $('#commentList'); 
+            var li = $compile('<addcommentbox docid="'+_id+ '" commentobj="" ></addcommentbox>')($scope);       
+            ul.append(li);
         }
     }]);

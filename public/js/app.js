@@ -8,7 +8,9 @@ angular.module('ih_app', [
     'uploadCompanyControllerModule',
     'settingsControllerModule',
     'clickyControllerModule',
-    'ipCheckControllerModule'
+    'ipCheckControllerModule',
+    'contactControllerModule',
+    'contactServiceModule'
 ])
 
 .config(function($routeProvider) {
@@ -33,7 +35,11 @@ angular.module('ih_app', [
         templateUrl : "/public/views/ipcheck.html",
         controller: "ipCheckController"
     })
-    .otherwise("/");
+    .when("/upload-contact", {
+        templateUrl : "/public/views/contact.html",
+        controller: "contactController"
+    })
+    .otherwise("/view_company");
 })
 
 .directive('scrolly', function () {
@@ -101,6 +107,138 @@ angular.module('ih_app', [
                 scope.$apply();               
                 scope.getvisitors();
             });                      
+        }
+    }
+}])
+
+.directive('listcomment', ['companyService', '$filter', function(companyService, $filter){
+    return {
+        restrict : 'E',
+        replace : true,
+        scope:{
+            commentobj: '=' ,
+            docid : '@'                   
+        },
+        template : '<li class="list-group-item"><div class="comment-data">{{ commentobj.text }}</div><div class="comment-edit-delete-div"><span class="comment-date" >{{ commentobj.date | date:\'yyyy-MM-dd HH:mm:ss a\' }}</span><span class="glyphicon glyphicon-pencil comment-btn comment-edit-btn"></span> <span class="glyphicon               glyphicon-trash comment-btn comment-delete-btn"></span></div></li>',        
+        link: function(scope, element, attrs){
+             var el = element;
+
+             el.on("click", ".cancel-comment", function(){
+                el.remove();
+             }); 
+
+             el.on("click", ".save-comment", function(){
+                 var val = el.find(".comment-textarea").val();   
+                 companyService.updateCompanyComment(scope.docid, scope.commentobj.date || -1 , val, function updateCompanyCommentCallback(result){
+                    if(result.error){
+                        console.log("Error : " + result.statusText);
+                    }
+                    else{
+                        
+                        el.empty();
+                        scope.commentobj = {};
+                        scope.commentobj.text = val;
+                        scope.commentobj.date = result.date;
+                        var formatedDate = $filter('date')(scope.commentobj.date, 'yyyy-MM-dd HH:mm:ss a');
+                        el.append('<div class="comment-data">' + val +'</div><div class="comment-edit-delete-div"><span class="comment-date" >' + formatedDate + '</span><span class="glyphicon glyphicon-pencil comment-btn comment-edit-btn"></span> <span class="glyphicon glyphicon-trash comment-btn comment-delete-btn"></span></div>');  
+                        // save in database  
+                    }
+                });
+                 
+             });
+
+             el.on("click", ".comment-edit-btn", function(){
+                 var val = el.find(".comment-data").text();
+                 el.empty();
+                 el.append('<textarea class="comment-textarea enable-textarea">' + val + '</textarea><div class="comment-action"><button class="save-comment">Save</button><button data-comment="'+ val + '" class="cancel-comment-edit">Cancel</button></div>');
+             });
+
+             el.on("click", ".cancel-comment-edit", function(){
+                 var val = $(this).data("comment");
+                 el.find('.comment-textarea').val(val);          
+                 el.find('.save-comment').click();  
+             });
+
+             el.on("click", ".comment-delete-btn", function(){
+                 el.remove();
+                 // delete from database
+                 companyService.updateCompanyCommentDelete(scope.docid, scope.commentobj.date || -1 , function updateCompanyCommentDeleteCallback(result){
+                     if(result.error){
+                        console.log("Error : " + result.statusText);
+                    }
+                    else{
+                        
+                       console.log("Comment deleted successfully");
+                        // save in database  
+                    }
+                 });
+             });
+        }
+    };
+
+}])
+
+.directive('addcommentbox', ['companyService', '$filter', function(companyService, $filter){
+    return {
+        restrict : 'E',
+        replace : true,
+        template : '<li class="list-group-item"><textarea class="comment-textarea enable-textarea"></textarea><div class="comment-action"><button class="save-comment">Save</button><button class="cancel-comment">Cancel</button></div></li>',
+        scope:{ 
+            commentobj: '@',
+            docid : '@'                 
+        },
+        link: function(scope, element, attrs){                 
+             var el = element;
+             
+             el.on("click", ".cancel-comment", function(){
+                el.remove();
+             }); 
+
+             el.on("click", ".save-comment", function(){
+                 var val = el.find(".comment-textarea").val();          
+                 companyService.updateCompanyComment(scope.docid, scope.commentobj.date || -1 , val, function updateCompanyCommentCallback(result){
+                    if(result.error){
+                        console.log("Error : " + result.statusText);
+                    }
+                    else{
+                        
+                        el.empty();
+                        scope.commentobj = {};
+                        scope.commentobj.text = val;
+                        scope.commentobj.date = result.date;
+                        var formatedDate = $filter('date')(scope.commentobj.date, 'yyyy-MM-dd HH:mm:ss a');
+                        el.append('<div class="comment-data">' + val +'</div><div class="comment-edit-delete-div"><span class="comment-date" >' + formatedDate + '</span><span class="glyphicon glyphicon-pencil comment-btn comment-edit-btn"></span> <span class="glyphicon glyphicon-trash comment-btn comment-delete-btn"></span></div>');  
+                        // save in database  
+                    }
+                });  
+             });
+
+             el.on("click", ".comment-edit-btn", function(){
+                 var val = el.find(".comment-data").text();
+                 el.empty();
+                 el.append('<textarea class="comment-textarea enable-textarea">' + val + '</textarea><div class="comment-action"><button class="save-comment">Save</button><button data-comment="'+ val + '" class="cancel-comment-edit">Cancel</button></div>');
+             });
+
+             el.on("click", ".cancel-comment-edit", function(){
+                 var val = $(this).data("comment");
+                 el.find('.comment-textarea').val(val);          
+                 el.find('.save-comment').click();  
+             });
+
+             el.on("click", ".comment-delete-btn", function(){
+                 el.remove();
+                 // delete from database
+                 companyService.updateCompanyCommentDelete(scope.docid, scope.commentobj.date || -1 , function updateCompanyCommentDeleteCallback(result){
+                     if(result.error){
+                        console.log("Error : " + result.statusText);
+                    }
+                    else{
+                        
+                       console.log("Comment deleted successfully");
+                        // save in database  
+                    }
+                 });
+             });            
         }
     }
 }]);

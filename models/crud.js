@@ -17,6 +17,9 @@ module.exports = {
     updateOne : function(db, collection_name, query, cb){
         var collection = db.collection(collection_name);
         collection.updateOne(query[0],query[1], function(err, r){
+            if(err){
+                console.log(err);
+            }
             cb(r);
         });
     },

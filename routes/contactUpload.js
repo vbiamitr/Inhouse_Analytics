@@ -9,7 +9,7 @@ var router = express.Router();
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, path.join( __dirname, '../uploads/company' ));
+        cb(null, path.join( __dirname, '../uploads/contact' ));
     },
     filename: function (req, file, cb) {
         var filename = file.originalname;
@@ -44,18 +44,19 @@ router.get('/', function (req, res, next) {
 
 router.post('/xlsx', upload.any(), function (req, res, next) {
     if (req.files) {
-        var columns = ['company', 'domain', 'address', 'city', 'state', 'zipcode', 'country', 'industry', 'sic_code', 'revenue', 'employees', 'software', 'parent', 'status', 'account_mgr', 'ip_address'];
+        var columns = ['firstName', 'lastName', 'fullName', 'company', 'email', 'companyDomain', 'title', 'titleTag', 'city', 'state', 'country', 'phoneNo', 'mobileNo', 'sourceEvent', 'source', 'leadOwner', 'status', 'lastTouchDate', 'emailVerified', 'phoneVerified', 'titleVerified',                'companyVerified', 'notes'];
+
         for(var i=0;i<req.files.length;i++){
             var file = req.files[i];
             var workbook = X.readFile(file.path);
             var sheet_json = to_json(workbook);
-            var query ={columns: columns, find:'domain', docs:[]};
+            var query ={columns: columns, find:'email', docs:[]};
             for(var sheet in sheet_json){
                 query.docs = query.docs.concat(sheet_json[sheet]);
             };
            
            MongoClient.connect(conf.url, function(err, db) {
-                var collection_name = 'company';
+                var collection_name = 'contact';
                 crud.insertIfNotExistUnorderedBulkOperation(db,collection_name,query,function(){
                     res.send('Document saved in database');
                     db.close();
@@ -66,11 +67,10 @@ router.post('/xlsx', upload.any(), function (req, res, next) {
     else {
         res.send("Files not found!");
     }
-
 });
 
-router.get('/getcompanyfiles', function (req, res, next) {
-    const companyDir = path.join( __dirname, '../uploads/company' );
+router.get('/getcontactfiles', function (req, res, next) {
+    const companyDir = path.join( __dirname, '../uploads/contact' );
     const fs = require('fs');
     fs.readdir(companyDir, (err, files) => {
         if(err){
@@ -85,7 +85,7 @@ router.get('/deletefile/:file', function (req, res, next) {
     var file = req.params.file;
     var status = {};
     const fs = require('fs');
-    const companyDir = path.join( __dirname, '../uploads/company' );    
+    const companyDir = path.join( __dirname, '../uploads/contact' );    
     if(file){       
         fs.unlink(path.join(companyDir, file), function(err){
             if(err){
@@ -110,7 +110,7 @@ router.get('/downloadfile/:file', function (req, res, next) {
     var file = req.params.file;
     var status = {};
     const fs = require('fs');
-    const companyDir = path.join( __dirname, '../uploads/company' );     
+    const companyDir = path.join( __dirname, '../uploads/contact' );     
     var filename = file;
     var ext_i = filename.lastIndexOf('.');
     var tmp_i = filename.lastIndexOf('_');       

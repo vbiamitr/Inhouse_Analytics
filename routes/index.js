@@ -190,4 +190,80 @@ router.get('/updatecompany-info/:_id/:field/:value', function(req, res, next) {
     });
  });
 });
+
+router.get('/updatecompany-comment/:_id/:jsdate/:value', function(req, res, next) {
+  var _id = req.params['_id'];
+  var jsdate = Number(req.params['jsdate']);
+  console.log("jsdate : " + jsdate);
+  var value = req.params['value'];  
+  var query;
+  var queryDelete;
+  if(jsdate === -1){
+      query = [
+            {"_id" : new ObjectID(_id) },
+            {$push : { "comment" : { "text" : value, "date" : Date.now() }}}
+        ];
+  }
+  else
+  {
+      query = [
+            {"_id" : new ObjectID(_id) },
+            {$push : { "comment" : { "text" : value, "date" : Date.now() }}}
+        ];
+
+      queryDelete = [
+            {"_id" : new ObjectID(_id) },
+            {$pull : { "comment" : { "date" : jsdate}}}
+      ];
+  }
+  
+ 
+  MongoClient.connect(conf.url, function(err, db) {
+    var collection_name = 'company';    
+    crud.updateOne(db,collection_name,query,function(doc){
+        if(doc){
+            res.json(query[1]["$push"]["comment"]);
+        }
+        else
+        {
+            res.json({ error: true , statusText: 'Could not save data!' });
+        }
+
+        if(!queryDelete){
+             db.close();
+        }
+    });
+
+    if(queryDelete){
+        crud.updateOne(db,collection_name,queryDelete,function(doc){
+            if(!doc){                
+               console.log({ error: true , statusText: 'Could not Delete comment!' + JSON.stringify(queryDelete) });
+            }
+            db.close();
+        });
+    }
+ });
+});
+
+router.get('/updatecompany-comment-delete/:_id/:jsdate', function(req, res, next) {
+    var _id = req.params['_id'];
+    var jsdate = Number(req.params['jsdate']);
+    var queryDelete = [
+            {"_id" : new ObjectID(_id) },
+            {$pull : { "comment" : { "date" : jsdate}}}
+      ];
+    MongoClient.connect(conf.url, function(err, db) {
+        var collection_name = 'company'; 
+        crud.updateOne(db,collection_name,queryDelete,function(doc){
+            if(doc){
+                res.json(doc);
+            }
+            else
+            {
+                res.json({ error: true , statusText: 'Could not Delete comment!' + JSON.stringify(queryDelete) });
+            }
+            db.close();
+        });
+    });
+});
 module.exports = router;

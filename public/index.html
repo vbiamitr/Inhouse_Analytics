@@ -29,9 +29,13 @@
                             <li><a href="#!/view_company">View Company</a></li>                        
                         </ul>
                     </li>
-                    <li>
-                    <a href="#">Contact</a>
-                    </li>
+                    <li class="dropdown" class="active">
+                        <a class="dropdown-toggle" data-toggle="dropdown">Contact <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#!/upload-contact">Add Contact</a></li>
+                            <li><a href="#!/view-contact">View Contact</a></li>                        
+                        </ul>
+                    </li>                    
                     <li>
                     <a href="#">Customers</a>
                     </li>    
@@ -59,11 +63,13 @@
         <script src="/public/js/services/utilityService.js" type="text/javascript"></script>
         <script src="/public/js/services/companyService.js" type="text/javascript"></script>
         <script src="/public/js/services/clickyService.js" type="text/javascript"></script>
+        <script src="/public/js/services/contactService.js" type="text/javascript"></script>
         <script src="/public/js/controllers/viewCompanyController.js" type="text/javascript"></script>
         <script src="/public/js/controllers/uploadCompanyController.js" type="text/javascript"></script>
         <script src="/public/js/controllers/settingsController.js" type="text/javascript"></script>   
         <script src="/public/js/controllers/clickyController.js" type="text/javascript"></script>
-        <script src="/public/js/controllers/ipCheckController.js" type="text/javascript"></script>               
+        <script src="/public/js/controllers/ipCheckController.js" type="text/javascript"></script>
+        <script src="/public/js/controllers/contactController.js" type="text/javascript"></script>               
         <script src="/public/js/app.js" type="text/javascript"></script>
     </body>
 </html>

@@ -102,5 +102,17 @@ angular.module('companyServiceModule',[])
             utilityService.makeHttpRequest(utilityService.makeUrl(urlParams), cb);
         }
 
+        service.updateCompanyComment = function(_id, jsdate, val, cb){
+            var urlParams = [utilityService.server_base_url ,'updatecompany-comment', _id, jsdate, val];
+            utilityService.makeHttpRequest(utilityService.makeUrl(urlParams), cb);
+        }
+
+        service.updateCompanyCommentDelete = function(_id, jsdate, cb){
+            var urlParams = [utilityService.server_base_url ,'updatecompany-comment-delete', _id, jsdate];
+            utilityService.makeHttpRequest(utilityService.makeUrl(urlParams), cb);
+        }
+
+
+
         return service;        
     }]);

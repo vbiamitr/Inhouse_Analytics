@@ -83,8 +83,8 @@
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                    <button ng-click="removeComments()" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
                     </button>
                     <h4 class="modal-title" id="myModalLabel">Details </h4>
                     
@@ -92,24 +92,20 @@
                 <div class="modal-body">
                     <div class="container-fluid">
                         <div class="row">
-                            <div class="col-md-6 info-div" ng-repeat="(key, info) in fieldInfo" ng-if="key != 'comment'"> 
-                                <div class="info-label">{{info.name}}</div> 
+                            <div class="col-md-6 info-div" ng-repeat="(key, info) in companyInfo" ng-if="key != 'comment' && key != '_id'"> 
+                                <div class="info-label">{{fieldInfo[key].name}}</div> 
                                 <div class="info-data" title="Click to edit" >
-                                    <input type="text" id="{{key}}" value="{{companyInfo[key]}}" disabled> 
+                                    <input type="text" id="{{key}}" value="{{info}}" disabled> 
                                     <span ng-click="allowEditing(key)" class="glyphicon glyphicon-pencil info-editsave-btn"></span>
                                     <span ng-click="saveEditing(key)" class="glyphicon glyphicon-floppy-disk info-editsave-btn"></span>                                    
                                 </div>
                             </div>                            
                         </div>
                         <div class="row">
-                            <div class="col-md-12 info-div"> <div class="info-label">Comments</div>
-                                <ul>
-                                    <li ng-repeat="comment in companyInfo['comment']">
-                                        <p class="action-info" >{{comment['text']}}</p>
-                                        <p>{{comment['time']}}</p>
-                                    </li>
-                                </ul>
-                                
+                            <div class="col-md-12 info-div"> <div class="info-label">Comments <span class="glyphicon glyphicon-plus add-comment" ng-click="appendComment(companyInfo['_id'])"></span></div>
+                                <ul id="commentList" class="list-group">
+                                    <listcomment ng-repeat="comment in companyInfo['comment']"   commentobj="comment" docid="{{companyInfo['_id']}}"></listcomment>                                    
+                                </ul>                                
                             </div>                            
                         </div>
                     </div>                    
