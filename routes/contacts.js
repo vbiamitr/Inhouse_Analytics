@@ -12,30 +12,10 @@ router.get('/', function (req, res, next) {
     res.sendFile('index.html', root_path);    
 });
 
-router.get('/getcompany', function (req, res, next) {
+router.get('/contacts/:skip/:limit', function (req, res, next) {
 
     MongoClient.connect(conf.url, function(err, db) {
-        var collection_name = 'company';
-        var query = {
-            find:{}
-        };
-        crud.find(db,collection_name,query,function(docs){
-            if(docs && docs.length){
-                 res.json(docs);
-            }
-            else
-            {
-                res.json({ error: true , statusText: 'Could not retrieve data!' });
-            }           
-            db.close();
-        });
-    });   
-});
-
-router.get('/companies/:skip/:limit', function (req, res, next) {
-
-    MongoClient.connect(conf.url, function(err, db) {
-        var collection_name = 'company';
+        var collection_name = 'contact';
         var query = { 
             find: {}, 
             skip: Number(req.params.skip),
@@ -54,10 +34,10 @@ router.get('/companies/:skip/:limit', function (req, res, next) {
     });   
 });
 
-router.get('/companies-total', function (req, res, next) {
+router.get('/contacts-total', function (req, res, next) {
 
     MongoClient.connect(conf.url, function(err, db) {
-        var collection_name = 'company';
+        var collection_name = 'contact';
         var query = { 
             find: {}            
         };
@@ -74,10 +54,10 @@ router.get('/companies-total', function (req, res, next) {
     });   
 });
 
-router.get('/companies/:skip/:limit/:search', function (req, res, next) {
+router.get('/contacts/:skip/:limit/:search', function (req, res, next) {
 
     MongoClient.connect(conf.url, function(err, db) {
-        var collection_name = 'company';
+        var collection_name = 'contact';
         var search = req.params.search;
         var query = {
             skip: Number(req.params.skip),
@@ -112,10 +92,10 @@ router.get('/companies/:skip/:limit/:search', function (req, res, next) {
     });   
 });
 
-router.get('/companies-total/:search', function (req, res, next) {
+router.get('/contacts-total/:search', function (req, res, next) {
 
     MongoClient.connect(conf.url, function(err, db) {
-        var collection_name = 'company';       
+        var collection_name = 'contact';       
         var search = req.params.search;
         var query = {};
         try {
@@ -146,13 +126,13 @@ router.get('/companies-total/:search', function (req, res, next) {
     });   
 });
 
-router.get('/companies-info/:_id', function(req, res, next) {
+router.get('/contacts-info/:_id', function(req, res, next) {
   var _id = req.params['_id'];
   var query = { 
     "find" : {"_id" : new ObjectID(_id) }    
   };  
   MongoClient.connect(conf.url, function(err, db) {
-    var collection_name = 'company';    
+    var collection_name = 'contact';    
     crud.findOne(db,collection_name,query,function(doc){
         if(doc){
             res.json(doc);
@@ -167,7 +147,7 @@ router.get('/companies-info/:_id', function(req, res, next) {
 });
 
 
-router.get('/companies-update/:_id/:field/:value', function(req, res, next) {
+router.get('/contacts-update/:_id/:field/:value', function(req, res, next) {
   var _id = req.params['_id'];
   var field = req.params['field'];
   var value = req.params['value'];
@@ -177,7 +157,7 @@ router.get('/companies-update/:_id/:field/:value', function(req, res, next) {
   ];
   query[1]['$set'][field] = value; 
   MongoClient.connect(conf.url, function(err, db) {
-    var collection_name = 'company';    
+    var collection_name = 'contact';    
     crud.updateOne(db,collection_name,query,function(doc){
         if(doc){
             res.json(doc);
@@ -191,7 +171,7 @@ router.get('/companies-update/:_id/:field/:value', function(req, res, next) {
  });
 });
 
-router.get('/companies-update-comment/:_id/:jsdate/:value', function(req, res, next) {
+router.get('/contacts-update-comment/:_id/:jsdate/:value', function(req, res, next) {
   var _id = req.params['_id'];
   var jsdate = Number(req.params['jsdate']);
   console.log("jsdate : " + jsdate);
@@ -219,7 +199,7 @@ router.get('/companies-update-comment/:_id/:jsdate/:value', function(req, res, n
   
  
   MongoClient.connect(conf.url, function(err, db) {
-    var collection_name = 'company';    
+    var collection_name = 'contact';    
     crud.updateOne(db,collection_name,query,function(doc){
         if(doc){
             res.json(query[1]["$push"]["comment"]);
@@ -245,7 +225,7 @@ router.get('/companies-update-comment/:_id/:jsdate/:value', function(req, res, n
  });
 });
 
-router.get('/companies-delete-comment/:_id/:jsdate', function(req, res, next) {
+router.get('/contacts-delete-comment/:_id/:jsdate', function(req, res, next) {
     var _id = req.params['_id'];
     var jsdate = Number(req.params['jsdate']);
     var queryDelete = [
@@ -253,7 +233,7 @@ router.get('/companies-delete-comment/:_id/:jsdate', function(req, res, next) {
             {$pull : { "comment" : { "date" : jsdate}}}
       ];
     MongoClient.connect(conf.url, function(err, db) {
-        var collection_name = 'company'; 
+        var collection_name = 'contact'; 
         crud.updateOne(db,collection_name,queryDelete,function(doc){
             if(doc){
                 res.json(doc);
@@ -268,9 +248,9 @@ router.get('/companies-delete-comment/:_id/:jsdate', function(req, res, next) {
 });
 
 
-router.get('/companies-fields', function(req, res, next) {
+router.get('/contacts-fields', function(req, res, next) {
     var query = { 
-        "find" : {"_id" : 'company' }    
+        "find" : {"_id" : 'contact' }    
     };  
     MongoClient.connect(conf.url, function(err, db) {
         var collection_name = 'fields_to_show';    
@@ -287,9 +267,9 @@ router.get('/companies-fields', function(req, res, next) {
     });
 });
 
-router.get('/companies-fieldsinfo', function(req, res, next) {
+router.get('/contacts-fieldsinfo', function(req, res, next) {
     var query = { 
-        "find" : {"_id" : 'company' }    
+        "find" : {"_id" : 'contact' }    
     };  
     MongoClient.connect(conf.url, function(err, db) {
         var collection_name = 'collection_fields';    

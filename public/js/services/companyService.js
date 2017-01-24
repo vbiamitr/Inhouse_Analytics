@@ -1,118 +1,353 @@
 angular.module('companyServiceModule',[])
     .factory('companyService', ['$http', 'utilityService', function($http, utilityService){
         var service = {};
-
-        // fields to show
-        service.fields = ["company", "domain", "address", "city", "state", "country", "industry", "revenue", "employees", "software", "status"];
+		// fields to show
+        /*service.fields = ["company", "domain", "address", "city", "state", "country", "industry", "revenue", "employees", "software", "status"];
 
         service.fieldInfo = {
-                    "company": {
-                        "name": "Company",
-                        "info": "Name of the company"
-                    },
-                    "domain": {
-                        "name": "Domain",
-                        "info": "Domain name of the company"
-                    },
-                    "address": {
-                        "name": "Address",
-                        "info": "Street Address of the company"
-                    },
-                    "city": {
-                        "name": "City",
-                        "info": "Name of the city"
-                    },
-                    "state": {
-                        "name": "State",
-                        "info": "Name of the state/province"
-                    },
-                    "zipcode": {
-                        "name": "Zipcode",
-                        "info": "Zip Code or Postal Code"
-                    },
-                    "country": {
-                        "name": "Country",
-                        "info": "Name of the country"
-                    },
-                    "industry": {
-                        "name": "Industry",
-                        "info": "Type of industry"
-                    },
-                    "sic_code": {
-                        "name": "SIC Code",
-                        "info": "SIC (Standard Industrial Classification) code of the industry"
-                    },
-                    "revenue": {
-                        "name": "Revenue",
-                        "info": "Revenue of the company"
-                    },
-                    "employees": {
-                        "name": "Employees",
-                        "info": "No. of employees in the company"
-                    },
-                    "software": {
-                        "name": "Software",
-                        "info": "Softwares being used by the company.Eg. \"BO,BI,BOBJ\" "
-                    },
-                    "parent": {
-                        "name": "Parent",
-                        "info": "The parent company"
-                    },
-                    "status": {
-                        "name": "Status",
-                        "info": "Client's Status"
-                    },
-                    "account_mgr": {
-                        "name": "Account Manager",
-                        "info": "Name of manager dealing with the client"
-                    },
-                    "ip_address": {
-                        "name": "IP Address",
-                        "info": "IP Address of the company"
-                    },
-                    "comment": {
-                        "name": "Comment",
-                        "info": "Comments"
-                    }
-            };
-
-        service.getCompany = function(options, cb){        
-            var urlParams = [utilityService.server_base_url ,'getcompany', options.skip, options.limit];
-            if(typeof options.search != "undefined"){
-                urlParams.push(options.search);            
-            }             
-            utilityService.makeHttpRequest(utilityService.makeUrl(urlParams), cb);
-        };
-
-        service.getCompanyTotal = function(options, cb){
-            var urlParams = [utilityService.server_base_url ,'getcompany_total'];
-            if(typeof options.search != "undefined"){
-                urlParams.push(options.search);            
+            "company": {
+                "name": "Company",
+                "info": "Name of the company"
+            },
+            "domain": {
+                "name": "Domain",
+                "info": "Domain name of the company"
+            },
+            "address": {
+                "name": "Address",
+                "info": "Street Address of the company"
+            },
+            "city": {
+                "name": "City",
+                "info": "Name of the city"
+            },
+            "state": {
+                "name": "State",
+                "info": "Name of the state/province"
+            },
+            "zipcode": {
+                "name": "Zipcode",
+                "info": "Zip Code or Postal Code"
+            },
+            "country": {
+                "name": "Country",
+                "info": "Name of the country"
+            },
+            "industry": {
+                "name": "Industry",
+                "info": "Type of industry"
+            },
+            "sic_code": {
+                "name": "SIC Code",
+                "info": "SIC (Standard Industrial Classification) code of the industry"
+            },
+            "revenue": {
+                "name": "Revenue",
+                "info": "Revenue of the company"
+            },
+            "employees": {
+                "name": "Employees",
+                "info": "No. of employees in the company"
+            },
+            "software": {
+                "name": "Software",
+                "info": "Softwares being used by the company.Eg. \"BO,BI,BOBJ\" "
+            },
+            "parent": {
+                "name": "Parent",
+                "info": "The parent company"
+            },
+            "status": {
+                "name": "Status",
+                "info": "Client's Status"
+            },
+            "account_mgr": {
+                "name": "Account Manager",
+                "info": "Name of manager dealing with the client"
+            },
+            "ip_address": {
+                "name": "IP Address",
+                "info": "IP Address of the company"
+            },
+            "comment": {
+                "name": "Comment",
+                "info": "Comments"
             }
-            utilityService.makeHttpRequest(utilityService.makeUrl(urlParams), cb);
+        };
+        */
+
+        var apiMap = {            
+            "getRecord" : {
+                "company" : "companies",
+                "contact" : "contacts/contacts"
+            },
+
+            "getRecordTotal" : {
+                "company" : "companies-total",
+                "contact" : "contacts/contacts-total"
+            },
+
+            "getRecordInfo" : {
+                "company" : "companies-info",
+                "contact" : "contacts/contacts-info"
+            },
+
+            "updateRecordInfo" : {
+                "company" : "companies-update",
+                "contact" : "contacts/contacts-update"
+            },
+
+            "updateComment" : {
+                "company" : "companies-update-comment",
+                "contact" : "contacts/contacts-update-comment"
+            },
+
+            "deleteComment" : {
+                "company" : "companies-delete-comment",
+                "contact" : "contacts/contacts-delete-comment"
+            },
+
+            "getFields" : {
+                "company" : "companies-fields",
+                "contact" : "contacts/contacts-fields"
+            },
+
+            "getFieldsInfo" : {
+                "company" : "companies-fieldsinfo",
+                "contact" : "contacts/contacts-fieldsinfo"
+            }
         };
 
-        service.getCompanyInfo = function(_id, cb){
-            var urlParams = [utilityService.server_base_url ,'getcompany-info', _id];
-            utilityService.makeHttpRequest(utilityService.makeUrl(urlParams), cb);
-        }
+        // for future use
+        var methodMap  = {
 
-        service.updateCompanyInfo = function(_id, field,val, cb){
-            var urlParams = [utilityService.server_base_url ,'updatecompany-info', _id, field, val];
-            utilityService.makeHttpRequest(utilityService.makeUrl(urlParams), cb);
-        }
+        };
 
-        service.updateCompanyComment = function(_id, jsdate, val, cb){
-            var urlParams = [utilityService.server_base_url ,'updatecompany-comment', _id, jsdate, val];
-            utilityService.makeHttpRequest(utilityService.makeUrl(urlParams), cb);
-        }
+        var internalMethods = {
 
-        service.updateCompanyCommentDelete = function(_id, jsdate, cb){
-            var urlParams = [utilityService.server_base_url ,'updatecompany-comment-delete', _id, jsdate];
-            utilityService.makeHttpRequest(utilityService.makeUrl(urlParams), cb);
-        }
+            "getRecord" :  function(options){            
+                var methodName = "getRecord",
+                    defaultFunc,
+                    collection = options.collection,
+                    fn = methodMap[methodName] && methodMap[methodName][collection] ? methodMap[methodName][collection] : null;
+                    
+                if(fn){
+                return  fn;
+                }
 
+                defaultFunc = function(options, cb){
+                    var api = apiMap[methodName][collection] || '',
+                        urlParams;
+                    if(api){
+                        urlParams = [utilityService.server_base_url ,api, options.skip, options.limit];
+                        if(typeof options.search != "undefined"){
+                            urlParams.push(options.search);            
+                        }             
+                        utilityService.makeHttpRequest(utilityService.makeUrl(urlParams), cb);
+                    }
+                    else
+                    {
+                        console.error("Error: " + methodName + " Implementation for " + collection + " not found");
+                    }
+                };            
+                return defaultFunc;
+            },
 
+            "getRecordTotal" : function(options){
+                var methodName = "getRecordTotal",
+                    defaultFunc,
+                    collection = options.collection,
+                    fn = methodMap[methodName] && methodMap[methodName][collection] ? methodMap[methodName][collection] : null;
+                    
+                if(fn){
+                return  fn;
+                }
+
+                defaultFunc = function(options, cb){
+                    var api = apiMap[methodName][collection] || '',
+                        urlParams;
+                    if(api){
+                        urlParams = [utilityService.server_base_url , api];
+                        if(typeof options.search != "undefined"){
+                            urlParams.push(options.search);            
+                        }
+                        utilityService.makeHttpRequest(utilityService.makeUrl(urlParams), cb);
+                    }
+                    else
+                    {
+                        console.error("Error: " + methodName + " Implementation for " + collection + " not found");
+                    }
+                };            
+                return defaultFunc;
+            },
+
+            "getRecordInfo" : function(options){
+                var methodName = "getRecordInfo",
+                    defaultFunc,
+                    collection = options.collection,
+                    fn = methodMap[methodName] && methodMap[methodName][collection] ? methodMap[methodName][collection] : null;
+                    
+                if(fn){
+                return  fn;
+                }
+
+                defaultFunc = function(options, cb){
+                    var api = apiMap[methodName][collection] || '',
+                        urlParams;
+                    if(api){
+                        urlParams = [utilityService.server_base_url , api, options._id];                    
+                        utilityService.makeHttpRequest(utilityService.makeUrl(urlParams), cb);
+                    }
+                    else
+                    {
+                        console.error("Error: " + methodName + " Implementation for " + collection + " not found");
+                    }
+                };            
+                return defaultFunc;
+            },
+
+            "updateRecordInfo" : function(options){
+                var methodName = "updateRecordInfo",
+                    defaultFunc,
+                    collection = options.collection,
+                    fn = methodMap[methodName] && methodMap[methodName][collection] ? methodMap[methodName][collection] : null;
+                    
+                if(fn){
+                    return  fn;
+                }
+
+                defaultFunc = function(options, cb){
+                    var api = apiMap[methodName][collection] || '',
+                        urlParams;
+                    if(api){
+                        urlParams = [utilityService.server_base_url ,api, options._id, options.field, options.val];
+                        utilityService.makeHttpRequest(utilityService.makeUrl(urlParams), cb);
+                    }
+                    else
+                    {
+                        console.error("Error: " + methodName + " Implementation for " + collection + " not found");
+                    }
+                };            
+                return defaultFunc;
+            },
+
+            "updateComment" : function(options){
+                var methodName = "updateComment",
+                    defaultFunc,
+                    collection = options.collection,
+                    fn = methodMap[methodName] && methodMap[methodName][collection] ? methodMap[methodName][collection] : null;
+                    
+                if(fn){
+                    return  fn;
+                }
+
+                defaultFunc = function(options, cb){
+                    var api = apiMap[methodName][collection] || '',
+                        urlParams;
+                    if(api){
+                        urlParams = [utilityService.server_base_url ,api, options._id, options.jsdate, options.val];
+                        utilityService.makeHttpRequest(utilityService.makeUrl(urlParams), cb);
+                    }
+                    else
+                    {
+                        console.error("Error: " + methodName + " Implementation for " + collection + " not found");
+                    }
+                };            
+                return defaultFunc;
+            },
+
+            "deleteComment" : function(options){
+                var methodName = "deleteComment",
+                    defaultFunc,
+                    collection = options.collection,
+                    fn = methodMap[methodName] && methodMap[methodName][collection] ? methodMap[methodName][collection] : null;
+                    
+                if(fn){
+                    return  fn;
+                }
+
+                defaultFunc = function(options, cb){
+                    var api = apiMap[methodName][collection] || '',
+                        urlParams;
+                    if(api){
+                        urlParams = [utilityService.server_base_url ,api, options._id, options.jsdate];
+                        utilityService.makeHttpRequest(utilityService.makeUrl(urlParams), cb);
+                    }
+                    else
+                    {
+                        console.error("Error: " + methodName + " Implementation for " + collection + " not found");
+                    }
+                };            
+                return defaultFunc;
+            },
+
+            "getFieldsInfo" : function(options){
+                var methodName = "getFieldsInfo",
+                    defaultFunc,
+                    collection = options.collection,
+                    fn = methodMap[methodName] && methodMap[methodName][collection] ? methodMap[methodName][collection] : null;
+                    
+                if(fn){
+                    return  fn;
+                }
+
+                defaultFunc = function(options, cb){
+                    var api = apiMap[methodName][collection] || '',
+                        urlParams;
+                    if(api){
+                        urlParams = [utilityService.server_base_url ,api];
+                        utilityService.makeHttpRequest(utilityService.makeUrl(urlParams), cb);
+                    }
+                    else
+                    {
+                        console.error("Error: " + methodName + " Implementation for " + collection + " not found");
+                    }
+                };            
+                return defaultFunc;
+            },
+
+            "getFields" : function(options){
+                var methodName = "getFields",
+                    defaultFunc,
+                    collection = options.collection,
+                    fn = methodMap[methodName] && methodMap[methodName][collection] ? methodMap[methodName][collection] : null;
+                    
+                if(fn){
+                    return  fn;
+                }
+
+                defaultFunc = function(options, cb){
+                    var api = apiMap[methodName][collection] || '',
+                        urlParams;
+                    if(api){
+                        urlParams = [utilityService.server_base_url ,api];
+                        utilityService.makeHttpRequest(utilityService.makeUrl(urlParams), cb);
+                    }
+                    else
+                    {
+                        console.error("Error: " + methodName + " Implementation for " + collection + " not found");
+                    }
+                };            
+                return defaultFunc;
+            },
+        };
+
+        service.initMethods = function(options, methodArr){
+            var exportMethods = {};
+            if(methodArr && methodArr.length){
+                methodArr.forEach(function(key){
+                    exportMethods[key] = internalMethods[key](options);
+                });
+            }
+            else
+            {
+                for(var key in internalMethods){
+                    exportMethods[key] = internalMethods[key](options);
+                }
+            }
+            
+            return exportMethods;
+        };
 
         return service;        
     }]);

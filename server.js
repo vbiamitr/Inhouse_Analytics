@@ -7,6 +7,7 @@ var uploads = require('./routes/upload');
 var clicky = require('./routes/clicky');
 var ipcheck = require('./routes/ipcheck');
 var contactUpload = require('./routes/contactUpload');
+var contacts = require('./routes/contacts');
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -18,6 +19,7 @@ app.use('/uploads', uploads);
 app.use('/clicky', clicky);
 app.use('/ipcheck', ipcheck);
 app.use('/contact-uploads', contactUpload);
+app.use('/contacts', contacts);
 
 // Error Handling Middleware
 

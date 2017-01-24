@@ -1,4 +1,4 @@
-<div class="vc_container" ng-controller="viewCompanyController">
+<div class="vc_container" ng-controller="viewContactController">
     
         <div class="adv-search-div">
             <div class="panel panel-default">
@@ -33,7 +33,7 @@
 
             <div class="panel panel-primary company-panel">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Companies <span ng-click="showFieldsConfig = !showFieldsConfig" ng-init="showFieldsConfig=false" class="glyphicon glyphicon-cog cog"></span></h3>  
+                    <h3 class="panel-title">Contacts <span ng-click="showFieldsConfig = !showFieldsConfig" ng-init="showFieldsConfig=false" class="glyphicon glyphicon-cog cog"></span></h3>  
                     <div ng-show="showFieldsConfig" class="col-selection arrow_box shadow">
                         <span ng-click="showFieldsConfig = !showFieldsConfig" class="glyphicon glyphicon-remove col-selection-close"></span>
                         <div class="checkbox" ng-repeat="(key,field) in fieldInfo">                            

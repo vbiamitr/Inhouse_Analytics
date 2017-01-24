@@ -9,14 +9,14 @@ angular.module('ih_app', [
     'settingsControllerModule',
     'clickyControllerModule',
     'ipCheckControllerModule',
-    'contactControllerModule',
-    'contactServiceModule'
+    'contactControllerModule',    
+    'viewContactControllerModule'
 ])
 
 .config(function($routeProvider) {
     $routeProvider
     .when("/upload/:type", {
-        templateUrl : "/public/views/uploads.html",
+        templateUrl : "/public/views/upload_company.html",
         controller: "uploadCompanyController"
     })
     .when("/view_company", {
@@ -36,8 +36,12 @@ angular.module('ih_app', [
         controller: "ipCheckController"
     })
     .when("/upload-contact", {
-        templateUrl : "/public/views/contact.html",
+        templateUrl : "/public/views/upload_contacts.html",
         controller: "contactController"
+    })
+    .when("/view-contact", {
+        templateUrl : "/public/views/view_contacts.html",
+        controller: "viewContactController"
     })
     .otherwise("/view_company");
 })

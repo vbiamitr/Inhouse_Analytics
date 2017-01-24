@@ -1,7 +1,22 @@
 angular.module('contactControllerModule',[])
-    .controller('contactController', ['$scope', 'Upload', '$timeout', '$routeParams',  '$filter' , 'utilityService', 'contactService',  function ($scope, Upload, $timeout, $routeParams, $filter, utilityService, contactService) {
+    .controller('contactController', ['$scope', 'Upload', '$timeout', '$routeParams',  '$filter' , 'utilityService', 'companyService',  function ($scope, Upload, $timeout, $routeParams, $filter, utilityService, companyService) {
 
-        $scope.fields = Object.keys(contactService.fieldInfo);
+        $scope.fields = [];
+        var collectionObj = {
+            collection : "contact"
+        };
+        var customService = companyService.initMethods(collectionObj, ['getFieldsInfo']); 
+        customService.getFieldsInfo({}, function getFieldsInfoCallback(result){
+            if(result.error){
+                $scope.error =  result.statusText;
+            }
+            else {         
+                delete result._id;                
+                $scope.allfields = $.extend({}, result);
+                $scope.fields = Object.keys( $scope.allfields);                
+            }
+        });
+
         var url = utilityService.server_base_url + '/contact-uploads/xlsx';
         $scope.type = $routeParams.type;
         $scope.uploadFiles = function (files) {
@@ -28,8 +43,8 @@ angular.module('contactControllerModule',[])
             }
         };
         $scope.getFieldInfo = function(field){
-            if(field && contactService.fieldInfo){
-                $scope.fieldInfo = contactService.fieldInfo[field].info || '';
+            if(field && $scope.allfields){
+                $scope.fieldInfo = $scope.allfields[field].info || '';
                 $scope.selectedField = field;
             }
         };

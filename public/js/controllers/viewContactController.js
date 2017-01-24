@@ -1,5 +1,5 @@
-angular.module('viewCompanyControllerModule',[])
-    .controller('viewCompanyController', ['$scope', 'companyService', '$window', '$compile', function ($scope, companyService, $window, $compile) {
+angular.module('viewContactControllerModule',[])
+    .controller('viewContactController', ['$scope', 'companyService', '$window', '$compile', function ($scope, companyService, $window, $compile) {
         var updatePages = function(){
             var totalPages = Math.floor($scope.cursor_total / $scope.cursor_limit) + 1;
             $scope.totalPages = totalPages;
@@ -26,7 +26,7 @@ angular.module('viewCompanyControllerModule',[])
         };  
 
         var collectionObj = {
-            collection : "company"
+            collection : "contact"
         };
         var customService = companyService.initMethods(collectionObj); 
         $scope.cursor_skip = 0;
