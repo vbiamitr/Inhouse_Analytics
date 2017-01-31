@@ -104,7 +104,7 @@
                         <div class="row">
                             <div class="col-md-12 info-div"> <div class="info-label">Comments <span class="glyphicon glyphicon-plus add-comment" ng-click="appendComment(recordsInfo['_id'])"></span></div>
                                 <ul id="commentList" class="list-group">
-                                    <listcomment ng-repeat="comment in recordsInfo['comment']"   commentobj="comment" docid="{{recordsInfo['_id']}}"></listcomment>                                    
+                                    <listcomment ng-repeat="comment in recordsInfo['comment']"   commentobj="comment" docid="{{recordsInfo['_id']}}" collectionname="company"></listcomment>                                    
                                 </ul>                                
                             </div>                            
                         </div>

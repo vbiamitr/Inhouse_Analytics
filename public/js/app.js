@@ -121,19 +121,30 @@ angular.module('ih_app', [
         replace : true,
         scope:{
             commentobj: '=' ,
-            docid : '@'                   
+            docid : '@',
+            collectionname : '@'                   
         },
-        template : '<li class="list-group-item"><div class="comment-data">{{ commentobj.text }}</div><div class="comment-edit-delete-div"><span class="comment-date" >{{ commentobj.date | date:\'yyyy-MM-dd HH:mm:ss a\' }}</span><span class="glyphicon glyphicon-pencil comment-btn comment-edit-btn"></span> <span class="glyphicon               glyphicon-trash comment-btn comment-delete-btn"></span></div></li>',        
+        template : '<li class="list-group-item"><div class="comment-data">{{ commentobj.text }}</div><div class="comment-edit-delete-div"><span class="comment-date" >{{ commentobj.date | date:\'yyyy-MM-dd HH:mm:ss a\' }}</span><span class="glyphicon glyphicon-pencil comment-btn comment-edit-btn"></span> <span class="glyphicon glyphicon-trash comment-btn comment-delete-btn"></span></div></li>',        
         link: function(scope, element, attrs){
              var el = element;
+             var collectionObj = {
+                 collection : scope.collectionname
+             };
+
+             var customService = companyService.initMethods(collectionObj, ['updateComment', 'deleteComment']); 
 
              el.on("click", ".cancel-comment", function(){
                 el.remove();
              }); 
 
              el.on("click", ".save-comment", function(){
-                 var val = el.find(".comment-textarea").val();   
-                 companyService.updateCompanyComment(scope.docid, scope.commentobj.date || -1 , val, function updateCompanyCommentCallback(result){
+                 var val = el.find(".comment-textarea").val();  
+                 var options = {
+                    "_id" : scope.docid,
+                    "jsdate" : scope.commentobj.date || -1,
+                    "val" : val
+                 }; 
+                 customService.updateComment(options, function updateCompanyCommentCallback(result){
                     if(result.error){
                         console.log("Error : " + result.statusText);
                     }
@@ -166,7 +177,11 @@ angular.module('ih_app', [
              el.on("click", ".comment-delete-btn", function(){
                  el.remove();
                  // delete from database
-                 companyService.updateCompanyCommentDelete(scope.docid, scope.commentobj.date || -1 , function updateCompanyCommentDeleteCallback(result){
+                 var options = {
+                    "_id" : scope.docid,
+                    "jsdate" : scope.commentobj.date || -1
+                 };
+                 customService.deleteComment(options , function updateCompanyCommentDeleteCallback(result){
                      if(result.error){
                         console.log("Error : " + result.statusText);
                     }
@@ -189,18 +204,29 @@ angular.module('ih_app', [
         template : '<li class="list-group-item"><textarea class="comment-textarea enable-textarea"></textarea><div class="comment-action"><button class="save-comment">Save</button><button class="cancel-comment">Cancel</button></div></li>',
         scope:{ 
             commentobj: '@',
-            docid : '@'                 
+            docid : '@',
+            collectionname : '@'                   
         },
         link: function(scope, element, attrs){                 
              var el = element;
+             var collectionObj = {
+                 collection : scope.collectionname
+             };
+
+             var customService = companyService.initMethods(collectionObj, ['updateComment', 'deleteComment']); 
              
              el.on("click", ".cancel-comment", function(){
                 el.remove();
              }); 
 
              el.on("click", ".save-comment", function(){
-                 var val = el.find(".comment-textarea").val();          
-                 companyService.updateCompanyComment(scope.docid, scope.commentobj.date || -1 , val, function updateCompanyCommentCallback(result){
+                 var val = el.find(".comment-textarea").val();
+                 var options = {
+                    "_id" : scope.docid,
+                    "jsdate" : scope.commentobj.date || -1,
+                    "val" : val
+                 };       
+                 customService.updateComment(options, function updateCompanyCommentCallback(result){
                     if(result.error){
                         console.log("Error : " + result.statusText);
                     }
@@ -232,7 +258,11 @@ angular.module('ih_app', [
              el.on("click", ".comment-delete-btn", function(){
                  el.remove();
                  // delete from database
-                 companyService.updateCompanyCommentDelete(scope.docid, scope.commentobj.date || -1 , function updateCompanyCommentDeleteCallback(result){
+                 var options = {
+                    "_id" : scope.docid,
+                    "jsdate" : scope.commentobj.date || -1                   
+                 };  
+                 customService.deleteComment(options , function updateCompanyCommentDeleteCallback(result){
                      if(result.error){
                         console.log("Error : " + result.statusText);
                     }

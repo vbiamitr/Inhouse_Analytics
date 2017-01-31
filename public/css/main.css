@@ -520,3 +520,7 @@ input[type=checkbox], input[type=radio] {
 .db-fields{
     padding : 10px 0 10px 0;
 }
+
+.diff {
+    color : #ff0000;
+}

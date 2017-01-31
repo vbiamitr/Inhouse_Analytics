@@ -1,5 +1,6 @@
 angular.module('viewContactControllerModule',[])
     .controller('viewContactController', ['$scope', 'companyService', '$window', '$compile', function ($scope, companyService, $window, $compile) {
+        var collectionName = "contact";
         var updatePages = function(){
             var totalPages = Math.floor($scope.cursor_total / $scope.cursor_limit) + 1;
             $scope.totalPages = totalPages;
@@ -26,7 +27,7 @@ angular.module('viewContactControllerModule',[])
         };  
 
         var collectionObj = {
-            collection : "contact"
+            collection : collectionName
         };
         var customService = companyService.initMethods(collectionObj); 
         $scope.cursor_skip = 0;
@@ -83,19 +84,6 @@ angular.module('viewContactControllerModule',[])
             }
         });
 
-
-        /*companyService.getCompany(options, function getCompanyCallback(result){
-            if(result.error){
-                $scope.error =  result.statusText;
-            }
-            else {         
-                $scope.cursor_skip = result.length;
-                $scope.records.length = 0;
-                $scope.records = $scope.records.concat(result);  
-                updatePages();     
-            }
-        });  */
-
         customService.getRecordTotal(options, function getRecordTotalCallback(result){
             if(result.error){
                 $scope.error =  result.statusText;
@@ -106,19 +94,7 @@ angular.module('viewContactControllerModule',[])
             }
         });
 
-       /* companyService.getCompanyTotal(options, function getCompanyTotalCallback(result){
-            if(result.error){
-                $scope.error =  result.statusText;
-            }
-            else {           
-                $scope.cursor_total = result.cursor_total;  
-                updatePages();
-            }
-        });   
-        */
-
-        
-
+       
         $scope.showMore = function(page){
             if(page < 1 || page > $scope.totalPages){
                 return;
@@ -144,19 +120,7 @@ angular.module('viewContactControllerModule',[])
                     $scope.records = $scope.records.concat(result);
                     updatePages();      
                 }
-            });
-
-           /* companyService['getCompany'](options , function showMoreCallback(result){
-                if(result.error){
-                    $scope.error =  result.statusText;
-                }
-                else {         
-                    $scope.cursor_skip = $scope.cursor_skip + result.length;                    
-                    $scope.records.length = 0;
-                    $scope.records = $scope.records.concat(result);
-                    updatePages();        
-                }
-            });    */        
+            });             
                     
         };
 
@@ -190,18 +154,7 @@ angular.module('viewContactControllerModule',[])
                 }
             });
 
-            /*companyService['getCompany'](options, function getCompanyCallback(result){
-                if(result.error){
-                    $scope.error =  result.statusText;
-                }
-                else {         
-                    $scope.cursor_skip = result.length;
-                    $scope.records.length = 0;
-                    $scope.records = $scope.records.concat(result);  
-                    updatePages();     
-                }
-            });*/
-
+          
             customService.getRecordTotal(options, function getRecordTotalCallback(result){
                 if(result.error){
                     $scope.error =  result.statusText;
@@ -211,16 +164,7 @@ angular.module('viewContactControllerModule',[])
                     updatePages();
                 }
             });
-
-           /* companyService['getCompanyTotal'](options, function getCompanyTotalCallback(result){
-                if(result.error){
-                    $scope.error =  result.statusText;
-                }
-                else {           
-                    $scope.cursor_total = result.cursor_total; 
-                    updatePages();      
-                }
-            });   */           
+         
         };
 
         $scope.getInfo = function (_id){
@@ -297,29 +241,17 @@ angular.module('viewContactControllerModule',[])
                     }
                 });
 
-                /*companyService.updaterecordsInfo($scope.recordsInfo._id, eleId, val, function updaterecordsInfoCallback(result){
-                    if(result.error){
-                        $scope.error =  result.statusText;
-                    }
-                    else{
-                        
-                        $( '#' + $scope.recordsInfo._id + '_' + eleId ).text(val);      // tried to wrap it in angular element, but doesn't work                  
-                        console.log("Saved");
-                    }
-                });*/
             }
         };
 
         $scope.removeComments = function(){
             var ul = $('#commentList'); 
-            ul.find('.list-group-item').remove();
-            /*var li = $compile('<listcomment ng-repeat="comment in recordsInfo[\'comment\']"   commentobj="comment" docid="{{recordsInfo[\'_id\']}}"></listcomment>')($scope); 
-            ul.append(li);*/
+            ul.find('.list-group-item').remove();            
         };        
 
         $scope.appendComment = function(_id){
             var ul = $('#commentList'); 
-            var li = $compile('<addcommentbox docid="'+_id+ '" commentobj="" ></addcommentbox>')($scope);       
+            var li = $compile('<addcommentbox docid="'+_id+ '" commentobj="" collectionname="'+ collectionName +'"></addcommentbox>')($scope);       
             ul.append(li);
         }
     }]);

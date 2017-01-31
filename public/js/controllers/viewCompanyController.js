@@ -1,5 +1,6 @@
 angular.module('viewCompanyControllerModule',[])
     .controller('viewCompanyController', ['$scope', 'companyService', '$window', '$compile', function ($scope, companyService, $window, $compile) {
+        var collectionName = "company"; 
         var updatePages = function(){
             var totalPages = Math.floor($scope.cursor_total / $scope.cursor_limit) + 1;
             $scope.totalPages = totalPages;
@@ -23,12 +24,14 @@ angular.module('viewCompanyControllerModule',[])
             }   
             $scope.recordStart = (page - 1) * $scope.cursor_limit + 1;
             $scope.recordEnd = $scope.recordStart + $scope.records.length - 1;                    
-        };  
+        };        
 
         var collectionObj = {
-            collection : "company"
+            collection : collectionName
         };
-        var customService = companyService.initMethods(collectionObj); 
+        var customService = companyService.initMethods(collectionObj);
+        $scope.updateComment = customService.updateComment;
+        $scope.deleteComment = customService.deleteComment; 
         $scope.cursor_skip = 0;
         $scope.cursor_limit = 200;
         $scope.stopScrolling = !1;
@@ -83,19 +86,7 @@ angular.module('viewCompanyControllerModule',[])
             }
         });
 
-
-        /*companyService.getCompany(options, function getCompanyCallback(result){
-            if(result.error){
-                $scope.error =  result.statusText;
-            }
-            else {         
-                $scope.cursor_skip = result.length;
-                $scope.records.length = 0;
-                $scope.records = $scope.records.concat(result);  
-                updatePages();     
-            }
-        });  */
-
+        
         customService.getRecordTotal(options, function getRecordTotalCallback(result){
             if(result.error){
                 $scope.error =  result.statusText;
@@ -106,19 +97,7 @@ angular.module('viewCompanyControllerModule',[])
             }
         });
 
-       /* companyService.getCompanyTotal(options, function getCompanyTotalCallback(result){
-            if(result.error){
-                $scope.error =  result.statusText;
-            }
-            else {           
-                $scope.cursor_total = result.cursor_total;  
-                updatePages();
-            }
-        });   
-        */
-
-        
-
+       
         $scope.showMore = function(page){
             if(page < 1 || page > $scope.totalPages){
                 return;
@@ -144,19 +123,7 @@ angular.module('viewCompanyControllerModule',[])
                     $scope.records = $scope.records.concat(result);
                     updatePages();      
                 }
-            });
-
-           /* companyService['getCompany'](options , function showMoreCallback(result){
-                if(result.error){
-                    $scope.error =  result.statusText;
-                }
-                else {         
-                    $scope.cursor_skip = $scope.cursor_skip + result.length;                    
-                    $scope.records.length = 0;
-                    $scope.records = $scope.records.concat(result);
-                    updatePages();        
-                }
-            });    */        
+            });             
                     
         };
 
@@ -190,18 +157,7 @@ angular.module('viewCompanyControllerModule',[])
                 }
             });
 
-            /*companyService['getCompany'](options, function getCompanyCallback(result){
-                if(result.error){
-                    $scope.error =  result.statusText;
-                }
-                else {         
-                    $scope.cursor_skip = result.length;
-                    $scope.records.length = 0;
-                    $scope.records = $scope.records.concat(result);  
-                    updatePages();     
-                }
-            });*/
-
+           
             customService.getRecordTotal(options, function getRecordTotalCallback(result){
                 if(result.error){
                     $scope.error =  result.statusText;
@@ -210,17 +166,7 @@ angular.module('viewCompanyControllerModule',[])
                     $scope.cursor_total = result.cursor_total;  
                     updatePages();
                 }
-            });
-
-           /* companyService['getCompanyTotal'](options, function getCompanyTotalCallback(result){
-                if(result.error){
-                    $scope.error =  result.statusText;
-                }
-                else {           
-                    $scope.cursor_total = result.cursor_total; 
-                    updatePages();      
-                }
-            });   */           
+            });                  
         };
 
         $scope.getInfo = function (_id){
@@ -295,31 +241,18 @@ angular.module('viewCompanyControllerModule',[])
                         $( '#' + $scope.recordsInfo._id + '_' + eleId ).text(val);      // tried to wrap it in angular element, but doesn't work                  
                         console.log("Saved");
                     }
-                });
-
-                /*companyService.updaterecordsInfo($scope.recordsInfo._id, eleId, val, function updaterecordsInfoCallback(result){
-                    if(result.error){
-                        $scope.error =  result.statusText;
-                    }
-                    else{
-                        
-                        $( '#' + $scope.recordsInfo._id + '_' + eleId ).text(val);      // tried to wrap it in angular element, but doesn't work                  
-                        console.log("Saved");
-                    }
-                });*/
+                });               
             }
         };
 
         $scope.removeComments = function(){
             var ul = $('#commentList'); 
-            ul.find('.list-group-item').remove();
-            /*var li = $compile('<listcomment ng-repeat="comment in recordsInfo[\'comment\']"   commentobj="comment" docid="{{recordsInfo[\'_id\']}}"></listcomment>')($scope); 
-            ul.append(li);*/
+            ul.find('.list-group-item').remove();            
         };        
 
         $scope.appendComment = function(_id){
             var ul = $('#commentList'); 
-            var li = $compile('<addcommentbox docid="'+_id+ '" commentobj="" ></addcommentbox>')($scope);       
+            var li = $compile('<addcommentbox docid="'+_id+ '" commentobj="" collectionname="'+collectionName+'"></addcommentbox>')($scope);       
             ul.append(li);
         }
     }]);
