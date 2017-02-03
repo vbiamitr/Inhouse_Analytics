@@ -42,11 +42,11 @@ body {
 }
 
 .vc_company_list {
-    height: calc(100vh - 150px);       
+    height: calc(100vh - 120px);       
 }
 
 .vc_clicky_list {
-    height: calc(100vh - 150px);       
+    height: calc(100vh - 120px);       
 }
 
 .company-panel {

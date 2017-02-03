@@ -181,19 +181,19 @@ router.get('/contacts-update-comment/:_id/:jsdate/:value', function(req, res, ne
   if(jsdate === -1){
       query = [
             {"_id" : new ObjectID(_id) },
-            {$push : { "comment" : { "text" : value, "date" : Date.now() }}}
+            {$push : { "comments" : { "text" : value, "date" : Date.now() }}}
         ];
   }
   else
   {
       query = [
             {"_id" : new ObjectID(_id) },
-            {$push : { "comment" : { "text" : value, "date" : Date.now() }}}
+            {$push : { "comments" : { "text" : value, "date" : Date.now() }}}
         ];
 
       queryDelete = [
             {"_id" : new ObjectID(_id) },
-            {$pull : { "comment" : { "date" : jsdate}}}
+            {$pull : { "comments" : { "date" : jsdate}}}
       ];
   }
   
@@ -202,7 +202,7 @@ router.get('/contacts-update-comment/:_id/:jsdate/:value', function(req, res, ne
     var collection_name = 'contact';    
     crud.updateOne(db,collection_name,query,function(doc){
         if(doc){
-            res.json(query[1]["$push"]["comment"]);
+            res.json(query[1]["$push"]["comments"]);
         }
         else
         {
@@ -230,7 +230,7 @@ router.get('/contacts-delete-comment/:_id/:jsdate', function(req, res, next) {
     var jsdate = Number(req.params['jsdate']);
     var queryDelete = [
             {"_id" : new ObjectID(_id) },
-            {$pull : { "comment" : { "date" : jsdate}}}
+            {$pull : { "comments" : { "date" : jsdate}}}
       ];
     MongoClient.connect(conf.url, function(err, db) {
         var collection_name = 'contact'; 

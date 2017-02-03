@@ -36,25 +36,73 @@ function to_json(workbook) {
 	return result;
 }
 
+var schemaInfo = {};
+
+(function getSchemaInfo(){
+     MongoClient.connect(conf.url, function(err, db) {
+        var collection_name = 'collection_fields';
+        var query = { 
+            find: {
+                '_id' : 'contact'
+            }           
+        };
+        crud.findOne(db,collection_name,query,function(doc){
+            if(doc){
+                 schemaInfo = doc;
+                 console.log(JSON.stringify(schemaInfo));
+            }
+            else
+            {
+                console.log('Could not retrieve data!');
+            }           
+            db.close();
+        });
+    });
+})();
+
+
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
     res.sendFile('index.html', root_path);    
 });
 
+router.get('/schema-info', function(req, res, next){
+    MongoClient.connect(conf.url, function(err, db) {
+        var collection_name = 'collection_fields';
+        var query = { 
+            find: {
+                '_id' : 'contact'
+            }           
+        };
+        crud.findOne(db,collection_name,query,function(doc){
+            if(doc){
+                 schemaInfo = doc;
+                 res.json(doc);
+            }
+            else
+            {
+                res.json({ error: true , statusText: 'Could not retrieve data!' });
+            }           
+            db.close();
+        });
+    });
+});
+
 router.post('/xlsx', upload.any(), function (req, res, next) {
     if (req.files) {
-        var columns = ['firstName', 'lastName', 'fullName', 'company', 'email', 'companyDomain', 'title', 'titleTag', 'city', 'state', 'country', 'phoneNo', 'mobileNo', 'sourceEvent', 'source', 'leadOwner', 'status', 'lastTouchDate', 'emailVerified', 'phoneVerified', 'titleVerified',                'companyVerified', 'notes'];
+        
+        var columns = Object.keys(schemaInfo).slice(1);
 
         for(var i=0;i<req.files.length;i++){
             var file = req.files[i];
             var workbook = X.readFile(file.path);
             var sheet_json = to_json(workbook);
             var query ={columns: columns, find:'email', docs:[]};
+            query.collectionFields = schemaInfo;            
             for(var sheet in sheet_json){
                 query.docs = query.docs.concat(sheet_json[sheet]);
-            };
-           
+            };           
            MongoClient.connect(conf.url, function(err, db) {
                 var collection_name = 'contact';
                 crud.insertIfNotExistUnorderedBulkOperation(db,collection_name,query,function(){

@@ -37,6 +37,31 @@ function to_json(workbook) {
 }
 
 
+var schemaInfo = {};
+
+(function getSchemaInfo(){
+     MongoClient.connect(conf.url, function(err, db) {
+        var collection_name = 'collection_fields';
+        var query = { 
+            find: {
+                '_id' : 'company'
+            }           
+        };
+        crud.findOne(db,collection_name,query,function(doc){
+            if(doc){
+                 schemaInfo = doc;
+                 console.log(JSON.stringify(schemaInfo));
+            }
+            else
+            {
+                console.log('Could not retrieve data!');
+            }           
+            db.close();
+        });
+    });
+})();
+
+
 /* GET home page. */
 router.get('/', function (req, res, next) {
     res.sendFile('index.html', root_path);    
@@ -44,12 +69,13 @@ router.get('/', function (req, res, next) {
 
 router.post('/xlsx', upload.any(), function (req, res, next) {
     if (req.files) {
-        var columns = ['company', 'domain', 'address', 'city', 'state', 'zipcode', 'country', 'industry', 'sic_code', 'revenue', 'employees', 'software', 'parent', 'status', 'account_mgr', 'ip_address'];
+        var columns = Object.keys(schemaInfo).slice(1);
         for(var i=0;i<req.files.length;i++){
             var file = req.files[i];
             var workbook = X.readFile(file.path);
             var sheet_json = to_json(workbook);
             var query ={columns: columns, find:'domain', docs:[]};
+            query.collectionFields = schemaInfo;
             for(var sheet in sheet_json){
                 query.docs = query.docs.concat(sheet_json[sheet]);
             };

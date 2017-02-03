@@ -24,12 +24,13 @@
             </div>
         </div>
         <div class="company-crosstab-div">
-            <div class="input-group">
+        <!-- <div class="input-group">
                 <input ng-model="search" type="text" class="form-control" placeholder="Search for...">
                 <span class="input-group-btn search-input-group-btn">
                     <button title="Search" class="btn btn-default" type="button" ng-click="initSearch()"><span class="glyphicon glyphicon-search search-icon"></span></button>
                 </span>
-            </div>
+             </div>
+        -->
 
             <div class="panel panel-primary company-panel">
                 <div class="panel-heading">
@@ -92,7 +93,7 @@
                 <div class="modal-body">
                     <div class="container-fluid">
                         <div class="row">
-                            <div class="col-md-6 info-div" ng-repeat="(key, info) in recordsInfo" ng-if="key != 'comment' && key != '_id'"> 
+                            <div class="col-md-6 info-div" ng-repeat="(key, info) in recordsInfo" ng-if="key != 'comments' && key != '_id'"> 
                                 <div class="info-label">{{fieldInfo[key].name}}</div> 
                                 <div class="info-data" title="Click to edit" >
                                     <input type="text" id="{{key}}" value="{{info}}" disabled> 
@@ -104,7 +105,7 @@
                         <div class="row">
                             <div class="col-md-12 info-div"> <div class="info-label">Comments <span class="glyphicon glyphicon-plus add-comment" ng-click="appendComment(recordsInfo['_id'])"></span></div>
                                 <ul id="commentList" class="list-group">
-                                    <listcomment ng-repeat="comment in recordsInfo['comment']"   commentobj="comment" docid="{{recordsInfo['_id']}}" collectionname="company"></listcomment>                                    
+                                    <listcomment ng-repeat="comment in recordsInfo['comments']"   commentobj="comment" docid="{{recordsInfo['_id']}}" collectionname="company"></listcomment>                                    
                                 </ul>                                
                             </div>                            
                         </div>

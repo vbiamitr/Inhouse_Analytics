@@ -6,166 +6,211 @@ var schema = [
         "_id" : "company",
         "company": {
             "name": "Company",
-            "info": "Name of the company"
+            "info": "Name of the company",
+            "type" : "string"
         },
         "domain": {
             "name": "Domain",
-            "info": "Domain name of the company"
+            "info": "Domain name of the company",
+            "type" : "string"
         },
         "address": {
             "name": "Address",
-            "info": "Street Address of the company"
+            "info": "Street Address of the company",
+            "type" : "string"
         },
         "city": {
             "name": "City",
-            "info": "Name of the city"
+            "info": "Name of the city",
+            "type" : "string"
         },
         "state": {
             "name": "State",
-            "info": "Name of the state/province"
+            "info": "Name of the state/province",
+            "type" : "string"
         },
         "zipcode": {
             "name": "Zipcode",
-            "info": "Zip Code or Postal Code"
+            "info": "Zip Code or Postal Code",
+            "type" : "string"
         },
         "country": {
             "name": "Country",
-            "info": "Name of the country"
+            "info": "Name of the country",
+            "type" : "string"
         },
         "industry": {
             "name": "Industry",
-            "info": "Type of industry"
+            "info": "Type of industry",
+            "type" : "string"
         },
         "sic_code": {
             "name": "SIC Code",
-            "info": "SIC (Standard Industrial Classification) code of the industry"
+            "info": "SIC (Standard Industrial Classification) code of the industry",
+            "type" : "string"
         },
         "revenue": {
             "name": "Revenue",
-            "info": "Revenue of the company"
+            "info": "Revenue of the company",
+            "type" : "string"
         },
         "employees": {
             "name": "Employees",
-            "info": "No. of employees in the company"
+            "info": "No. of employees in the company",
+            "type" : "string"
         },
         "software": {
             "name": "Software",
-            "info": "Softwares being used by the company.Eg. \"BO,BI,BOBJ\" "
+            "info": "Softwares being used by the company.Eg. \"BO,BI,BOBJ\" ",
+            "type" : "string"
         },
         "parent": {
             "name": "Parent",
-            "info": "The parent company"
+            "info": "The parent company",
+            "type" : "string"
         },
         "status": {
             "name": "Status",
-            "info": "Client's Status"
+            "info": "Client's Status",
+            "type" : "string"
         },
         "account_mgr": {
             "name": "Account Manager",
-            "info": "Name of manager dealing with the client"
+            "info": "Name of manager dealing with the client",
+            "type" : "string"
         },
         "ip_address": {
             "name": "IP Address",
-            "info": "IP Address of the company"
+            "info": "IP Address of the company",
+            "type" : "string"
         },
-        "comment": {
-            "name": "Comment",
-            "info": "Comments"
+        "comments": {
+            "name": "Comments",
+            "info": "Comments",
+            "type" : "array"
         }
     },
     {
         "_id" : "contact",
         "firstName": {
             "name": "First Name",
-            "info": "First Name of the person"
+            "info": "First Name of the person",
+            "type" : "string"
         },
         "lastName": {
             "name": "Last Name",
-            "info": "Last Name of the person"
+            "info": "Last Name of the person",
+            "type" : "string"
         },
         "fullName": {
             "name": "Full Name",
-            "info": "Full Name of the person"
+            "info": "Full Name of the person",
+            "type" : "string"
         },
         "company": {
             "name": "Company",
-            "info": "Name of the company"
+            "info": "Name of the company",
+            "type" : "string"
         },
         "email": {
             "name": "Email Id",
-            "info": "Email Id"
+            "info": "Email Id",
+            "type" : "string"
         },
         "companyDomain": {
             "name": "Company Domain",
-            "info": "Domain of the company"
+            "info": "Domain of the company",
+            "type" : "string"
         },
         "title": {
             "name": "Title",
-            "info": "Title of the contact"
+            "info": "Title of the contact",
+            "type" : "string"
         },
         "titleTag": {
             "name": "Title Tag",
-            "info": "Title Tag"
+            "info": "Title Tag",
+            "type" : "string"
         },
         "city": {
             "name": "City",
-            "info": "City"
+            "info": "City",
+            "type" : "string"
         },
         "state": {
             "name": "State",
-            "info": "State"
+            "info": "State",
+            "type" : "string"
         },
         "country": {
             "name": "Country",
-            "info": "Country"
+            "info": "Country",
+            "type" : "string"
         },
         "phoneNo": {
             "name": "Phone No.",
-            "info": "Phone No."
+            "info": "Phone No.",
+            "type" : "string"
         },
         "mobileNo": {
             "name": "Mobile No.",
-            "info": "Mobile No."
+            "info": "Mobile No.",
+            "type" : "string"
         },
         "sourceEvent": {
             "name": "Source Event",
-            "info": "Source Event"
+            "info": "Source Event",
+            "type" : "string"
         },
         "source": {
             "name": "Source",
-            "info": "Source of the contact"
+            "info": "Source of the contact",
+            "type" : "string"
         },
         "leadOwner": {
             "name": "Lead Owner",
-            "info": "Lead Owner"
+            "info": "Lead Owner",
+            "type" : "string"
         },
         "status": {
             "name": "Status",
-            "info": "Status"
+            "info": "Status",
+            "type" : "string"
         },
         "lastTouchDate": {
             "name": "Last Touch Date",
-            "info": "Last Touch Date"
+            "info": "Last Touch Date",
+            "type" : "string"
         },
         "emailVerified": {
             "name": "Email Verified",
-            "info": "Email Verified"
+            "info": "Email Verified",
+            "type" : "boolean"
         },
         "phoneVerified": {
             "name": "Phone Verified",
-            "info": "Phone Verified"
+            "info": "Phone Verified",
+            "type" : "boolean"
         },
         "titleVerified": {
             "name": "Title Verified",
-            "info": "Title Verified"
+            "info": "Title Verified",
+            "type" : "boolean"
         },
         "companyVerified": {
             "name": "Company Verified",
-            "info": "Company Verified"
+            "info": "Company Verified",
+            "type" : "boolean"
         },
-        "comment": {
-            "name": "Comment",
-            "info": "Comments"
+        "followup_priority" :{
+            "name": "Follow Up Priority",
+            "info": "Follow Up Priority",
+            "type" : "string"
+        },
+        "comments": {
+            "name": "Comments",
+            "info": "Comments",
+            "type" : "array"
         }
     }
 ];
@@ -223,4 +268,4 @@ var populateDB = function (collection_name, insert_arr){
     });
 };
 
-populateDB('fields_to_show', fiieldsToShow);
+populateDB('collection_fields', schema);

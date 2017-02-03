@@ -88,30 +88,74 @@ module.exports = {
         });
     },
     insertIfNotExistUnorderedBulkOperation : function(db, collection_name, query, cb){
-        var collection = db.collection(collection_name),
-           // batch = collection.initializeOrderedBulkOp(),
+        var collection = db.collection(collection_name),           
             columns = query.columns,
             qfind = {},
             l_doc = {},
-            l_key = '';        
-        var docs_to_save = query.docs;
-        var insert_arr = [];
+            l_key = '',        
+            docs_to_save = query.docs,
+            insert_arr = [],
+            fields = query.collectionFields,
+            getData = function(col, val){
+                var type = fields[col].type,
+                    initData = {
+                        'string' : function(data){
+                            return typeof data === "undefined" ? '' : data;
+                        },
+                        'number' : function(data){
+                            return typeof data === "undefined" ? 0 : Number(data);
+                        },
+                        'boolean' : function(data){
+                            return  data && (data === "true" || data === true) ? true : false;
+                        },
+                        'array' : function(data){
+                            var ret = [];
+                            if(typeof data === "undefined"){
+                                return ret;
+                            }
+                            if(col === 'comments'){
+                                var commentObj = {};
+                                commentObj.date = Date.now();
+                                commentObj.text = data;
+                                ret.push(commentObj);
+                            }
+                            else
+                            {
+                               ret.push(data);
+                            }
+                            return ret;                            
+                        }                
+                    };
 
+                if(initData[type]){
+                    return initData[type](val);
+                }
+                else{
+                    return initData['string'](val);
+                }            
+        };
         // Recursive function to check if the record exist then update otherwise push the record to insert Array.
         function checkDocsToInsertOrUpdate(docs) {
+            var doc,
+                u_doc, /* update Doc */
+                i_doc; /* insert Doc */
+                
+
             if (docs_to_save.length) {
-                var doc = docs_to_save.shift();
-                l_doc = {};
+                doc = docs_to_save.shift();
+                u_doc = {};
+                i_doc = {};
                 columns.forEach(function (col) {
                     if(typeof doc[col] != "undefined"){
-                        l_doc[col] = doc[col];
+                        u_doc[col] = getData(col, doc[col]); 
                     }                     
+                    i_doc[col] = u_doc[col] || getData(col, doc[col]);                                     
                 });
-                if (l_doc[query.find]) {
-                    qfind[query.find] = l_doc[query.find];
-                    collection.updateOne(qfind,{ $set: l_doc }, function(err, result){
+                if (u_doc[query.find]) {
+                    qfind[query.find] = u_doc[query.find];
+                    collection.updateOne(qfind,{ $set: u_doc }, function(err, result){
                         if(!result.result.n){
-                            insert_arr.push(l_doc);
+                            insert_arr.push(i_doc);
                         }
                         checkDocsToInsertOrUpdate(docs);
                     });                    
