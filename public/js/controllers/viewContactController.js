@@ -4,7 +4,8 @@ angular.module('viewContactControllerModule',[])
             collectionObj = {
                 collection : collectionName
             },
-            customService = companyService.initMethods(collectionObj);
+            customService = companyService.initMethods(collectionObj),
+            elementIdToUpdate = {};
 
         $scope.updateComment = customService.updateComment;
         $scope.deleteComment = customService.deleteComment;               
@@ -50,6 +51,7 @@ angular.module('viewContactControllerModule',[])
             else {         
                 $scope.fields = result.fields.slice(0);
             }
+            $scope.initSearch();
         }
 
         function getFieldsInfoCallback(result){
@@ -99,8 +101,10 @@ angular.module('viewContactControllerModule',[])
                 $scope.error =  result.statusText;
             }
             else{                        
-                $( '#' + $scope.recordsInfo._id + '_' + eleId ).text(val);      // tried to wrap it in angular element, but doesn't work                  
-                //console.log("Saved");
+                if(Object.keys(elementIdToUpdate).length){
+                     $( '#' + $scope.recordsInfo._id + '_' + elementIdToUpdate.id ).text(elementIdToUpdate.val);     // tried to wrap it in angular element, but doesn't work                  
+                    elementIdToUpdate={};
+                }
             }
         }       
        
@@ -189,6 +193,8 @@ angular.module('viewContactControllerModule',[])
                 options = {};
             ele.attr('disabled', 'disabled');
             if($scope.recordsInfo[eleId] !== val){
+                elementIdToUpdate.id = eleId;
+                elementIdToUpdate.val = val;
                 options = {
                     "_id" : $scope.recordsInfo._id,
                     "field" : eleId,
@@ -211,5 +217,5 @@ angular.module('viewContactControllerModule',[])
 
         customService.getFields({}, getFieldsCallback);
         customService.getFieldsInfo({}, getFieldsInfoCallback);
-        $scope.initSearch();
+        
     }]);

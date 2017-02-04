@@ -4,23 +4,14 @@ angular.module('clickyControllerModule',[])
             collectionObj = {
                 collection : collectionName
             },
-            customService = companyService.initMethods(collectionObj);
+            customService = companyService.initMethods(collectionObj),
+            elementIdToUpdate = {};
         $scope.date = moment('2016-09-20').subtract(1,'day').format('YYYY-MM-DD'); 
         $scope.recordsInfo = {};        
         $scope.colsw = 100;
         $scope.fields = [];  
         $scope.fieldInfo = {};
-
-        function resetScopeVar(){
-            $scope.cursor_skip = 0;
-            $scope.cursor_limit = 200;
-            $scope.stopScrolling = !1;
-            $scope.cursor_total = 0;
-            $scope.visitors = [];
-            $scope.showInfo = false;
-            $scope.selectedCompany = "";
-        }
-
+                
         function updatePages(){
             var totalPages = Math.floor($scope.cursor_total / $scope.cursor_limit) + 1;            
             var diff = 5;
@@ -57,6 +48,7 @@ angular.module('clickyControllerModule',[])
             else {         
                 $scope.fields = result.fields.slice(0);
             }
+            $scope.initSearch();
         }
 
         function getFieldsInfoCallback(result){
@@ -106,7 +98,10 @@ angular.module('clickyControllerModule',[])
                 $scope.error =  result.statusText;
             }
             else{                        
-                $( '#' + $scope.recordsInfo._id + '_' + eleId ).text(val);      // tried to wrap it in angular element, but doesn't work                  
+                if(Object.keys(elementIdToUpdate).length){
+                     $( '#' + $scope.recordsInfo._id + '_' + elementIdToUpdate.id ).text(elementIdToUpdate.val);     // tried to wrap it in angular element, but doesn't work                  
+                    elementIdToUpdate={};
+                }              
                 //console.log("Saved");
             }
         }
@@ -133,7 +128,7 @@ angular.module('clickyControllerModule',[])
             
             options = {
                 date : $scope.date,
-                projection : ['ip_address', 'organization', 'geolocation', 'country_code', 'landing_page'],//$scope.fields,
+                projection : $scope.fields,//['ip_address', 'organization', 'geolocation', 'country_code', 'landing_page'],//
                 skip : ($scope.page - 1) * $scope.cursor_limit,
                 limit : $scope.cursor_limit
             };
@@ -184,7 +179,30 @@ angular.module('clickyControllerModule',[])
             }
         };
 
+        $scope.allowEditing = function(eleId){
+            var ele = angular.element( document.querySelector( '#' + eleId ));            
+            ele.removeAttr('disabled');
+            ele.addClass('allow-edit');
+            ele.focus();
+        };
+
+        $scope.saveEditing = function(eleId){
+            var ele = angular.element( document.querySelector( '#' + eleId )),
+                val = ele.val(),
+                options = {};
+            ele.attr('disabled', 'disabled');
+            if($scope.recordsInfo[eleId] !== val){
+                elementIdToUpdate.id = eleId;
+                elementIdToUpdate.val = val;
+                options = {
+                    "_id" : $scope.recordsInfo._id,
+                    "field" : eleId,
+                    "val" : val
+                }
+                customService.updateRecordInfo(options, updateRecordInfoCallback);               
+            }
+        };
+
         customService.getFields({}, getFieldsCallback);
-        customService.getFieldsInfo({}, getFieldsInfoCallback);
-        $scope.initSearch();              
+        customService.getFieldsInfo({}, getFieldsInfoCallback);                      
     }]);

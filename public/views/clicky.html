@@ -31,11 +31,11 @@
              </div>
         -->
 
-            <div class="panel panel-primary company-panel">
+            <div class="panel panel-default company-panel">
                 <div class="panel-heading">
                     <h3 class="panel-title">Visitors 
                         <span class='datetimepicker-container'>                        
-                                <datetimepicker requireddate="date" getvisitors="getvisitorsbydate()"></datetimepicker>                    
+                                <datetimepicker requireddate="date" getvisitors="initSearch()"></datetimepicker>                    
                         </span>
                         <span ng-click="showFieldsConfig = !showFieldsConfig" ng-init="showFieldsConfig=false" class="glyphicon glyphicon-cog cog"></span>
                     </h3>  
@@ -66,15 +66,15 @@
             </div>
             <div class="table-status">                
                     <ul class="pagination pagination-sm">
-                        <li class="page-item" ng-class="{'disabled' : page == 1 }" ng-click="showMore(page -1)">
+                        <li class="page-item" ng-class="{'disabled' : page == 1 }" ng-click="initSearch(page -1)">
                         <span class="page-link" aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
                             <span class="sr-only">Previous</span>
                         </span>
                         </li>
-                        <li class="page-item pg" ng-repeat="p in pages" ng-class="{'pg-active' : page == p }" ng-click="showMore(p)"><span class="page-link">{{p}}</span></li>
+                        <li class="page-item pg" ng-repeat="p in pages" ng-class="{'pg-active' : page == p }" ng-click="initSearch(p)"><span class="page-link">{{p}}</span></li>
                         
-                        <li class="page-item" ng-class="{'disabled' : page == totalPages }" ng-click="showMore(page + 1)">
+                        <li class="page-item" ng-class="{'disabled' : page == totalPages }" ng-click="initSearch(page + 1)">
                         <span class="page-link" href="#" aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
                             <span class="sr-only">Next</span>
@@ -97,10 +97,10 @@
                 <div class="modal-body">
                     <div class="container-fluid">
                         <div class="row">
-                            <div class="col-md-6 info-div" ng-repeat="(key, info) in recordsInfo" ng-if="key != 'actions' && key != '_id'"> 
+                            <div class="col-md-6 info-div" ng-repeat="(key, info) in recordsInfo" ng-if="key != 'actions' && fieldInfo.hasOwnProperty(key)"> 
                                 <div class="info-label">{{fieldInfo[key].name}}</div> 
                                 <div class="info-data" title="Click to edit" >
-                                    <input type="text" id="{{key}}" value="{{info}}" disabled> 
+                                    <input style="width:90%" type="text" id="{{key}}" value="{{info}}" disabled> 
                                     <span ng-click="allowEditing(key)" class="glyphicon glyphicon-pencil info-editsave-btn"></span>
                                     <span ng-click="saveEditing(key)" class="glyphicon glyphicon-floppy-disk info-editsave-btn"></span>                                    
                                 </div>

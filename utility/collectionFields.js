@@ -215,11 +215,16 @@ var schema = [
     },
     {
         "_id" : "clicky",
-        actions:  {
-            info: "actions",
-            name: "actions",
+        time_pretty:  {
+            info: "Date",
+            name: "Date",
             type: "string"
         },
+         organization:  {
+            info: "Organization",
+            name: "Organization",
+            type: "string"
+        },        
         country_code:  {
             info: "Country",
             name: "Country",
@@ -234,12 +239,7 @@ var schema = [
             info: "IP Address",
             name: "IP Address",
             type: "string"
-        },
-        landing_page:  {
-            info: "Landing Page",
-            name: "Landing Page",
-            type: "string"
-        },
+        },        
         latitude:  {
             info: "Latitude",
             name: "Latitude",
@@ -254,22 +254,12 @@ var schema = [
             info: "Operating System",
             name: "Operating System",
             type: "string"
-        },
-        organization:  {
-            info: "Organization",
-            name: "Organization",
-            type: "string"
-        },
+        },       
         screen_resolution:  {
             info: "Screen Resolution",
             name: "Screen Resolution",
             type: "string"
-        },
-        time_pretty:  {
-            info: "Date",
-            name: "Date",
-            type: "string"
-        },
+        },        
         time_total :  {
             info: "Total Time Spent",
             name: "Total Time Spent",
@@ -283,6 +273,16 @@ var schema = [
         web_browser:  {
             info: "Web Browser",
             name: "Web Browser",
+            type: "string"
+        },
+        landing_page:  {
+            info: "Landing Page",
+            name: "Landing Page",
+            type: "string"
+        },
+        actions:  {
+            info: "actions",
+            name: "actions",
             type: "string"
         }
     }
@@ -351,4 +351,4 @@ var populateDB = function (collection_name, insert_arr){
     });
 };
 
-populateDB('fields_to_show', [fiieldsToShow[2]]);
+populateDB('collection_fields', [schema[2]]);

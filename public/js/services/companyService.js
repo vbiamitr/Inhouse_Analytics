@@ -98,7 +98,7 @@ angular.module('companyServiceModule',[])
             "updateRecordInfo" : {
                 "company" : "companies-update",
                 "contact" : "contacts/contacts-update",
-                "clicky" : "clicky/update-visitor-info"
+                "clicky" : "clicky/clicky-update"
             },
 
             "updateComment" : {

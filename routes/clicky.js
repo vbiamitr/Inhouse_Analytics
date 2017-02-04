@@ -6,6 +6,8 @@ var conf = require('../config/db');
 var crud = require('../models/crud');
 var moment = require('moment');
 var router = express.Router();
+var dbUrl = conf.clicky_url;
+var collection_name = "vbi_visitors";
 
 /* GET home page. */
 router.get('/', function(req, res, next) {  
@@ -32,8 +34,7 @@ router.get('/visitors-list/:date/:projection/:skip/:limit', function(req, res, n
     "skip" : Number(req.params.skip),
     "limit" : Number(req.params.limit)
   };
-  MongoClient.connect(conf.clicky_url, function(err, db) {
-    var collection_name = 'vbi_visitors';    
+  MongoClient.connect(dbUrl, function(err, db) {        
     crud.find(db,collection_name,query,function(docs){
         if(docs && docs.length){
             res.json(docs);
@@ -52,8 +53,7 @@ router.get('/visitors-list-total/:date', function(req, res, next) {
   var query = { 
     find: {"date" : date}    
   };
-  MongoClient.connect(conf.clicky_url, function(err, db) {
-    var collection_name = 'vbi_visitors';    
+  MongoClient.connect(dbUrl, function(err, db) {       
     crud.count(db,collection_name,query,function(count){
         if(typeof count != "undefined"){
                 res.json({cursor_total: count});
@@ -98,8 +98,7 @@ router.get('/visitors-list/:date/:projection/:skip/:limit/:search', function (re
         }        
     }      
 
-    MongoClient.connect(conf.clicky_url, function(err, db) {
-        var collection_name = 'vbi_visitors';       
+    MongoClient.connect(dbUrl, function(err, db) {              
         crud.find(db,collection_name,query,function(docs){
             if(docs && docs.length){
                  res.json(docs);
@@ -137,8 +136,7 @@ router.get('/visitors-list-total/:date/:search', function (req, res, next) {
             } 
         } 
     }   
-    MongoClient.connect(conf.clicky_url, function(err, db) {
-        var collection_name = 'vbi_visitors';    
+    MongoClient.connect(dbUrl, function(err, db) {           
         crud.count(db,collection_name,query,function(count){
             if(typeof count != "undefined"){
                     res.json({cursor_total: count});
@@ -157,8 +155,7 @@ router.get('/visitor-info/:_id', function(req, res, next) {
   var query = { 
     "find" : {"_id" : new ObjectID(_id) }    
   };  
-  MongoClient.connect(conf.clicky_url, function(err, db) {
-    var collection_name = 'vbi_visitors';    
+  MongoClient.connect(dbUrl, function(err, db) {       
     crud.findOne(db,collection_name,query,function(doc){
         if(doc){
             res.json(doc);
@@ -166,6 +163,29 @@ router.get('/visitor-info/:_id', function(req, res, next) {
         else
         {
             res.json({ error: true , statusText: 'Could not retrieve data!' });
+        }           
+        db.close();
+    });
+ });
+});
+
+router.get('/clicky-update/:_id/:field/:value', function(req, res, next) {
+  var _id = req.params['_id'];
+  var field = req.params['field'];
+  var value = req.params['value'];
+  var query = [
+      {"_id" : new ObjectID(_id) },
+      {$set:{}}
+  ];
+  query[1]['$set'][field] = value; 
+  MongoClient.connect(dbUrl, function(err, db) {        
+    crud.updateOne(db,collection_name,query,function(doc){
+        if(doc){
+            res.json(doc);
+        }
+        else
+        {
+            res.json({ error: true , statusText: 'Could not save data!' });
         }           
         db.close();
     });
