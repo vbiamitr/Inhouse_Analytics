@@ -212,6 +212,79 @@ var schema = [
             "info": "Comments",
             "type" : "array"
         }
+    },
+    {
+        "_id" : "clicky",
+        actions:  {
+            info: "actions",
+            name: "actions",
+            type: "string"
+        },
+        country_code:  {
+            info: "Country",
+            name: "Country",
+            type: "string"
+        },
+        geolocation:  {
+            info: "Geolocation",
+            name: "Geolocation",
+            type: "string"
+        },
+        ip_address:  {
+            info: "IP Address",
+            name: "IP Address",
+            type: "string"
+        },
+        landing_page:  {
+            info: "Landing Page",
+            name: "Landing Page",
+            type: "string"
+        },
+        latitude:  {
+            info: "Latitude",
+            name: "Latitude",
+            type: "string"
+        },
+        longitude:  {
+            info: "Longitude",
+            name: "Longitude",
+            type: "string"
+        },
+        operating_system:  {
+            info: "Operating System",
+            name: "Operating System",
+            type: "string"
+        },
+        organization:  {
+            info: "Organization",
+            name: "Organization",
+            type: "string"
+        },
+        screen_resolution:  {
+            info: "Screen Resolution",
+            name: "Screen Resolution",
+            type: "string"
+        },
+        time_pretty:  {
+            info: "Date",
+            name: "Date",
+            type: "string"
+        },
+        time_total :  {
+            info: "Total Time Spent",
+            name: "Total Time Spent",
+            type: "string"
+        },
+        total_visits:  {
+            info: "Total Visits",
+            name: "Total Visits",
+            type: "string"
+        },
+        web_browser:  {
+            info: "Web Browser",
+            name: "Web Browser",
+            type: "string"
+        }
     }
 ];
 
@@ -244,6 +317,16 @@ var fiieldsToShow = [
             'leadOwner',
             'status'           
         ]
+    },
+    {
+        "_id" : "clicky",
+        "fields" : [
+            'ip_address',
+            'organization',
+            'geolocation',
+            'country_code',
+            'landing_page'
+        ]
     }
 ];
 
@@ -268,4 +351,4 @@ var populateDB = function (collection_name, insert_arr){
     });
 };
 
-populateDB('collection_fields', schema);
+populateDB('fields_to_show', [fiieldsToShow[2]]);

@@ -172,4 +172,43 @@ router.get('/visitor-info/:_id', function(req, res, next) {
  });
 });
 
+router.get('/clicky-fields', function(req, res, next) {
+    var query = { 
+        "find" : {"_id" : 'clicky' }    
+    };  
+    MongoClient.connect(conf.url, function(err, db) {
+        var collection_name = 'fields_to_show';    
+        crud.findOne(db,collection_name,query,function(doc){
+            if(doc){
+                res.json(doc);
+            }
+            else
+            {
+                res.json({ error: true , statusText: 'Could not retrieve data!' });
+            }           
+            db.close();
+        });
+    });
+});
+
+router.get('/clicky-fieldsinfo', function(req, res, next) {
+    var query = { 
+        "find" : {"_id" : 'clicky' }    
+    };  
+    MongoClient.connect(conf.url, function(err, db) {
+        var collection_name = 'collection_fields';    
+        crud.findOne(db,collection_name,query,function(doc){
+            if(doc){
+                res.json(doc);
+            }
+            else
+            {
+                res.json({ error: true , statusText: 'Could not retrieve data!' });
+            }           
+            db.close();
+        });
+    });
+});
+
+
 module.exports = router;

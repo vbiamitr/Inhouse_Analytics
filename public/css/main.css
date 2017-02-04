@@ -219,10 +219,10 @@ a, .field-label {
 }
 
 .ih-tbody-company {
-    height: calc(100vh - 180px); 
+    height: calc(100vh - 160px); 
 }
 .ih-tbody-clicky {
-    height: calc(100vh - 225px); 
+    height: calc(100vh - 160px); 
 }
 
 .action-info {

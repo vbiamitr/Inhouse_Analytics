@@ -79,22 +79,26 @@ angular.module('companyServiceModule',[])
         var apiMap = {            
             "getRecord" : {
                 "company" : "companies",
-                "contact" : "contacts/contacts"
+                "contact" : "contacts/contacts",
+                "clicky" : "clicky/visitors-list"
             },
 
             "getRecordTotal" : {
                 "company" : "companies-total",
-                "contact" : "contacts/contacts-total"
+                "contact" : "contacts/contacts-total",
+                "clicky" : "clicky/visitors-list-total"
             },
 
             "getRecordInfo" : {
                 "company" : "companies-info",
-                "contact" : "contacts/contacts-info"
+                "contact" : "contacts/contacts-info",
+                "clicky" : "clicky/visitor-info"
             },
 
             "updateRecordInfo" : {
                 "company" : "companies-update",
-                "contact" : "contacts/contacts-update"
+                "contact" : "contacts/contacts-update",
+                "clicky" : "clicky/update-visitor-info"
             },
 
             "updateComment" : {
@@ -109,18 +113,58 @@ angular.module('companyServiceModule',[])
 
             "getFields" : {
                 "company" : "companies-fields",
-                "contact" : "contacts/contacts-fields"
+                "contact" : "contacts/contacts-fields",
+                "clicky" : "clicky/clicky-fields"
             },
 
             "getFieldsInfo" : {
                 "company" : "companies-fieldsinfo",
-                "contact" : "contacts/contacts-fieldsinfo"
+                "contact" : "contacts/contacts-fieldsinfo",
+                "clicky" : "clicky/clicky-fieldsinfo"
             }
         };
 
-        // for future use
+        
+        // for custom methods
         var methodMap  = {
-
+            "getRecord" : {
+                "clicky" : function(options, cb){
+                    var methodName = "getRecord",
+                        collection = "clicky",
+                        api = apiMap[methodName][collection] || '',
+                        urlParams;
+                    if(api){
+                        urlParams = [utilityService.server_base_url ,api, options.date, options.projection.join(','), options.skip, options.limit];
+                        if(typeof options.search != "undefined"){
+                            urlParams.push(options.search);            
+                        }             
+                        utilityService.makeHttpRequest(utilityService.makeUrl(urlParams), cb);
+                    }
+                    else
+                    {
+                        console.error("Error: " + methodName + " Implementation for " + collection + " not found");
+                    }
+                }
+            },
+            "getRecordTotal" : {
+                "clicky" : function(options, cb){
+                    var methodName = "getRecordTotal",
+                        collection = "clicky",
+                        api = apiMap[methodName][collection] || '',
+                        urlParams;
+                    if(api){
+                        urlParams = [utilityService.server_base_url ,api, options.date];
+                        if(typeof options.search != "undefined"){
+                            urlParams.push(options.search);            
+                        }             
+                        utilityService.makeHttpRequest(utilityService.makeUrl(urlParams), cb);
+                    }
+                    else
+                    {
+                        console.error("Error: " + methodName + " Implementation for " + collection + " not found");
+                    }
+                }
+            }
         };
 
         var internalMethods = {
@@ -132,7 +176,7 @@ angular.module('companyServiceModule',[])
                     fn = methodMap[methodName] && methodMap[methodName][collection] ? methodMap[methodName][collection] : null;
                     
                 if(fn){
-                return  fn;
+                    return  fn;
                 }
 
                 defaultFunc = function(options, cb){
