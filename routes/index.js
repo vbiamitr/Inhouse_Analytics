@@ -12,6 +12,16 @@ router.get('/', function (req, res, next) {
     res.sendFile('index.html', root_path);    
 });
 
+router.get('/contactspage/:domain', function (req, res, next) {
+    var domain = req.params['domain'];    
+    var ejsPath = path.join(root_path.root, 'views/company_contacts');    
+    res.render(ejsPath , {"title": "First EJS Page", "items" :{
+     "first" : "Car",
+     "second" : "Food",
+     "third" : "Computer"   
+    }});    
+});
+
 router.get('/getcompany', function (req, res, next) {
 
     MongoClient.connect(conf.url, function(err, db) {

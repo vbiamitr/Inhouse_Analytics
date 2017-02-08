@@ -88,7 +88,7 @@ a, .field-label {
 
 .vc-advsearch-pnl-body {
     font-size: 1em;
-    background-color: #f5f5f5;
+    /*background-color: #f5f5f5;*/
     overflow-y: auto;
     color: #999999;
 }
@@ -215,7 +215,7 @@ a, .field-label {
 }
 
 .ih-tbody tr:nth-child(even) {
-    background-color:  #DDD;
+    background-color:  #d9e6f2;
 }
 
 .ih-tbody-company {
@@ -523,4 +523,8 @@ input[type=checkbox], input[type=radio] {
 
 .diff {
     color : #ff0000;
+}
+
+.btn-contacts-count {
+    padding: 3px 10px;
 }

@@ -1,5 +1,10 @@
-<div class="vc_container" ng-controller="viewCompanyController">
     
+<html>
+<head>
+<title> Company Contacts </title>
+</head>
+<body>
+    <div class="vc_container" ng-controller="viewContactController">    
         <div class="adv-search-div">
             <div class="panel panel-default">
                 <div class="panel-heading vc-advsearch-pnl-heading">
@@ -24,17 +29,9 @@
             </div>
         </div>
         <div class="company-crosstab-div">
-        <!-- <div class="input-group">
-                <input ng-model="search" type="text" class="form-control" placeholder="Search for...">
-                <span class="input-group-btn search-input-group-btn">
-                    <button title="Search" class="btn btn-default" type="button" ng-click="initSearch()"><span class="glyphicon glyphicon-search search-icon"></span></button>
-                </span>
-             </div>
-        -->
-
             <div class="panel panel-primary company-panel">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Companies <span ng-click="showFieldsConfig = !showFieldsConfig" ng-init="showFieldsConfig=false" class="glyphicon glyphicon-cog cog"></span></h3>  
+                    <h3 class="panel-title">Contacts <span ng-click="showFieldsConfig = !showFieldsConfig" ng-init="showFieldsConfig=false" class="glyphicon glyphicon-cog cog"></span></h3>  
                     <div ng-show="showFieldsConfig" class="col-selection arrow_box shadow">
                         <span ng-click="showFieldsConfig = !showFieldsConfig" class="glyphicon glyphicon-remove col-selection-close"></span>
                         <div class="checkbox" ng-repeat="(key,field) in fieldInfo">                            
@@ -53,7 +50,7 @@
                             </tr>
                         </thead>
                         <tbody class="ih-tbody ih-tbody-company">
-                            <tr ng-repeat="company in records" data-toggle="modal" data-target="#myModal" ng-click="getInfo(company._id, company.domain)">
+                            <tr ng-repeat="company in records" data-toggle="modal" data-target="#myModal" ng-click="getInfo(company._id)">
                                 <td class="ih-td" style="width:{{colsw + 'px'}}" ng-repeat="field in fields" id="{{company._id + '_' + field}}" > {{company[field]}}</td>                            
                             </tr>
                         </tbody>
@@ -103,15 +100,9 @@
                             </div>                            
                         </div>
                         <div class="row">
-                            <div class="col-md-12 info-div">
-                                 <div class="info-label">Contacts</div>
-                                 <div class="info-data"> <a class="btn btn-sm btn-contacts-count" ng-class="contactsCount ? 'btn-success' : 'btn-danger'" role="button" target="_blank" href="http://localhost:3000/#/view-contact/{{companyDomain}}">{{contactsCount}}</a></div>                                                               
-                            </div>
-                        </div>
-                        <div class="row">
                             <div class="col-md-12 info-div"> <div class="info-label">Comments <span class="glyphicon glyphicon-plus add-comment" ng-click="appendComment(recordsInfo['_id'])"></span></div>
                                 <ul id="commentList" class="list-group">
-                                    <listcomment ng-repeat="comment in recordsInfo['comments']"   commentobj="comment" docid="{{recordsInfo['_id']}}" collectionname="company"></listcomment>                                    
+                                    <listcomment ng-repeat="comment in recordsInfo['comments']"   commentobj="comment" docid="{{recordsInfo['_id']}}" collectionname="contact"></listcomment>                                    
                                 </ul>                                
                             </div>                            
                         </div>
@@ -119,7 +110,7 @@
                 </div>                
                 </div>
             </div>
-        </div>
-        
-       
+        </div>      
 </div>
+</body>
+</html>

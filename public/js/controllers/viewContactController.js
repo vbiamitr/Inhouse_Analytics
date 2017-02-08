@@ -1,5 +1,5 @@
 angular.module('viewContactControllerModule',[])
-    .controller('viewContactController', ['$scope', 'companyService', '$window', '$compile', function ($scope, companyService, $window, $compile) {
+    .controller('viewContactController', ['$scope', 'companyService', '$window', '$compile', '$routeParams', function ($scope, companyService, $window, $compile, $routeParams) {
         var collectionName = "contact",
             collectionObj = {
                 collection : collectionName
@@ -13,6 +13,7 @@ angular.module('viewContactControllerModule',[])
         $scope.colsw = 100;
         $scope.fields = [];  
         $scope.fieldInfo = {};
+        $scope.param = $routeParams.domain;
         
 
         function updatePages(){
@@ -51,7 +52,17 @@ angular.module('viewContactControllerModule',[])
             else {         
                 $scope.fields = result.fields.slice(0);
             }
-            $scope.initSearch();
+
+            if($scope.param){
+                var defaultSearchObj = {
+                    "companyDomain" : $scope.param
+                };
+                $scope.advancedSearch(defaultSearchObj);
+            }
+            else
+            {
+                $scope.initSearch();
+            }            
         }
 
         function getFieldsInfoCallback(result){
@@ -150,15 +161,24 @@ angular.module('viewContactControllerModule',[])
             customService.getRecordInfo(options, getRecordInfoCallBack);
         };
 
-        $scope.advancedSearch = function(){
+        $scope.advancedSearch = function(defaultSearch){
             var fields = $scope.fields;
             var search_obj = {};
-            fields.forEach(function(field){
-                var ele = angular.element( document.querySelector( '#adv_input_' + field ));
-                if(ele.val()){
-                    search_obj[field] = ele.val();
+            if(defaultSearch){
+                for(var key in defaultSearch){
+                    search_obj[key] = defaultSearch[key];
                 }
-            });
+            }
+            else
+            {
+                fields.forEach(function(field){
+                    var ele = angular.element( document.querySelector( '#adv_input_' + field ));
+                    if(ele.val()){
+                        search_obj[field] = ele.val();
+                    }                
+                });
+            }
+            
             $scope.search = JSON.stringify(search_obj);
             console.log($scope.search);
             $scope.initSearch();
@@ -215,7 +235,10 @@ angular.module('viewContactControllerModule',[])
             ul.append(li);
         }
 
+        
+        
         customService.getFields({}, getFieldsCallback);
         customService.getFieldsInfo({}, getFieldsInfoCallback);
+         
         
     }]);

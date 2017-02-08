@@ -43,6 +43,10 @@ angular.module('ih_app', [
         templateUrl : "/public/views/view_contacts.html",
         controller: "viewContactController"
     })
+    .when("/view-contact/:domain", {
+        templateUrl : "/public/views/view_contacts.html",
+        controller: "viewContactController"
+    })
     .otherwise("/view_company");
 })
 
@@ -124,7 +128,7 @@ angular.module('ih_app', [
             docid : '@',
             collectionname : '@'                   
         },
-        template : '<li class="list-group-item"><div class="comment-data">{{ commentobj.text }}</div><div class="comment-edit-delete-div"><span class="comment-date" >{{ commentobj.date | date:\'yyyy-MM-dd HH:mm:ss a\' }}</span><span class="glyphicon glyphicon-pencil comment-btn comment-edit-btn"></span> <span class="glyphicon glyphicon-trash comment-btn comment-delete-btn"></span></div></li>',        
+        template : '<li class="list-group-item"><div class="comment-data">{{ commentobj.text }}</div><div class="comment-edit-delete-div"><span class="comment-date" >{{ commentobj.date | date:\'yyyy-MM-dd HH:mm:ss\' }}</span><span class="glyphicon glyphicon-pencil comment-btn comment-edit-btn"></span> <span class="glyphicon glyphicon-trash comment-btn comment-delete-btn"></span></div></li>',        
         link: function(scope, element, attrs){
              var el = element;
              var collectionObj = {
@@ -154,7 +158,7 @@ angular.module('ih_app', [
                         scope.commentobj = {};
                         scope.commentobj.text = val;
                         scope.commentobj.date = result.date;
-                        var formatedDate = $filter('date')(scope.commentobj.date, 'yyyy-MM-dd HH:mm:ss a');
+                        var formatedDate = $filter('date')(scope.commentobj.date, 'yyyy-MM-dd HH:mm:ss');
                         el.append('<div class="comment-data">' + val +'</div><div class="comment-edit-delete-div"><span class="comment-date" >' + formatedDate + '</span><span class="glyphicon glyphicon-pencil comment-btn comment-edit-btn"></span> <span class="glyphicon glyphicon-trash comment-btn comment-delete-btn"></span></div>');  
                         // save in database  
                     }
@@ -236,7 +240,7 @@ angular.module('ih_app', [
                         scope.commentobj = {};
                         scope.commentobj.text = val;
                         scope.commentobj.date = result.date;
-                        var formatedDate = $filter('date')(scope.commentobj.date, 'yyyy-MM-dd HH:mm:ss a');
+                        var formatedDate = $filter('date')(scope.commentobj.date, 'yyyy-MM-dd HH:mm:ss');
                         el.append('<div class="comment-data">' + val +'</div><div class="comment-edit-delete-div"><span class="comment-date" >' + formatedDate + '</span><span class="glyphicon glyphicon-pencil comment-btn comment-edit-btn"></span> <span class="glyphicon glyphicon-trash comment-btn comment-delete-btn"></span></div>');  
                         // save in database  
                     }

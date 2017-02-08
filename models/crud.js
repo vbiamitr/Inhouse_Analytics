@@ -43,7 +43,7 @@ module.exports = {
     },
     count: function(db, collection_name, query, cb){
         var collection = db.collection(collection_name);
-        collection.find(query.find).count(function(err, count){
+        collection.count(query.find,function(err, count){
             cb(count);
         });
     },

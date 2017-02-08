@@ -9,6 +9,8 @@ var ipcheck = require('./routes/ipcheck');
 var contactUpload = require('./routes/contactUpload');
 var contacts = require('./routes/contacts');
 
+
+app.set('view engine', 'ejs');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

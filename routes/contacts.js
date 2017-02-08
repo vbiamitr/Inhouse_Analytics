@@ -286,4 +286,24 @@ router.get('/contacts-fieldsinfo', function(req, res, next) {
     });
 });
 
+router.get('/contacts-count/:domain', function(req, res, next) {
+    var domain = req.params['domain'];
+    var query = { 
+        "find" : {"companyDomain" : domain }    
+    };  
+    MongoClient.connect(conf.url, function(err, db) {
+        var collection_name = 'contact';    
+        crud.count(db,collection_name,query,function(count){
+            if(typeof count !== "undefined"){
+                res.json({'contactsCount' : count});
+            }
+            else
+            {
+                res.json({ error: true , statusText: 'Could not retrieve data!' });
+            }           
+            db.close();
+        });
+    });
+});
+
 module.exports = router;

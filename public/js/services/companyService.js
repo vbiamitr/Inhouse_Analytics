@@ -121,6 +121,10 @@ angular.module('companyServiceModule',[])
                 "company" : "companies-fieldsinfo",
                 "contact" : "contacts/contacts-fieldsinfo",
                 "clicky" : "clicky/clicky-fieldsinfo"
+            },
+
+            "getContactsCount" :{
+                "company" : "contacts/contacts-count"
             }
         };
 
@@ -154,6 +158,25 @@ angular.module('companyServiceModule',[])
                         urlParams;
                     if(api){
                         urlParams = [utilityService.server_base_url ,api, options.date];
+                        if(typeof options.search != "undefined"){
+                            urlParams.push(options.search);            
+                        }             
+                        utilityService.makeHttpRequest(utilityService.makeUrl(urlParams), cb);
+                    }
+                    else
+                    {
+                        console.error("Error: " + methodName + " Implementation for " + collection + " not found");
+                    }
+                }
+            },
+            "getContactsCount" : {
+                "company" : function(options, cb){
+                    var methodName = "getContactsCount",
+                        collection = "company",
+                        api = apiMap[methodName][collection] || '',
+                        urlParams;
+                    if(api){
+                        urlParams = [utilityService.server_base_url ,api, options.companyDomain];
                         if(typeof options.search != "undefined"){
                             urlParams.push(options.search);            
                         }             
@@ -374,6 +397,30 @@ angular.module('companyServiceModule',[])
                 };            
                 return defaultFunc;
             },
+            "getContactsCount" : function(options){
+                var methodName = "getContactsCount",
+                    defaultFunc,
+                    collection = options.collection,
+                    fn = methodMap[methodName] && methodMap[methodName][collection] ? methodMap[methodName][collection] : null;
+                    
+                if(fn){
+                    return  fn;
+                }
+
+                defaultFunc = function(options, cb){
+                    var api = apiMap[methodName][collection] || '',
+                        urlParams;
+                    if(api){
+                        urlParams = [utilityService.server_base_url ,api, options.companyDomain];
+                        utilityService.makeHttpRequest(utilityService.makeUrl(urlParams), cb);
+                    }
+                    else
+                    {
+                        console.error("Error: " + methodName + " Implementation for " + collection + " not found");
+                    }
+                };            
+                return defaultFunc;
+            }
         };
 
         service.initMethods = function(options, methodArr){

@@ -9,7 +9,9 @@ angular.module('viewCompanyControllerModule',[])
 
         $scope.updateComment = customService.updateComment;
         $scope.deleteComment = customService.deleteComment;               
-        $scope.recordsInfo = {};        
+        $scope.recordsInfo = {}; 
+        $scope.companyDomain = "";
+        $scope.contactsCount = 0;       
         $scope.colsw = 100;
         $scope.fields = [];  
         $scope.fieldInfo = {};
@@ -107,6 +109,16 @@ angular.module('viewCompanyControllerModule',[])
                 }
                 //console.log("Saved");
             }
+        }
+
+        function getContactsCountCallback(result){
+            if(result.error){
+                $scope.error = result.statusText;
+            }
+            else
+            {
+                $scope.contactsCount = result.contactsCount;
+            }
         }       
        
         $scope.initSearch = function(page){
@@ -143,12 +155,15 @@ angular.module('viewCompanyControllerModule',[])
             }                              
         };
 
-        $scope.getInfo = function (_id){
+        $scope.getInfo = function (_id, domain){
             $scope.recordsInfo = {};
+            $scope.companyDomain = domain || "";
+            $scope.contactsCount = 0;
             var options = {
                 "_id" : _id
             };
             customService.getRecordInfo(options, getRecordInfoCallBack);
+            customService.getContactsCount({"companyDomain" : $scope.companyDomain}, getContactsCountCallback);
         };
 
         $scope.advancedSearch = function(){
