@@ -242,19 +242,19 @@ a, .field-label {
     min-height : 20px;
 }
 
-.datetimepicker-container{
-    width: 120px;    
-    float: right;
-    display: inline-block;
+.datetimepicker-container {
+    padding-bottom: 15px;    
+}
+
+.datetimepicker-container span{
+    font-size : 1em;
 }
 
 .datetimepicker-container input{
     padding : 1px 5px;
     height : 25px;
-}
-
-.datetimepicker-container span{
-    padding : 1px 3px;
+    font-size : 1.2em;
+    font-weight: bold;    
 }
 
 .ipc_left_div {
@@ -527,4 +527,21 @@ input[type=checkbox], input[type=radio] {
 
 .btn-contacts-count {
     padding: 3px 10px;
+}
+
+.datepicker table {
+    font-size : 1.2em;
+}
+
+.clicky-data-ul {
+    height :  calc(100vh - 130px);
+    overflow: auto;
+    margin-bottom: 5px;
+}
+
+.ip-heading {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 5px;
+
 }

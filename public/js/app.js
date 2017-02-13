@@ -97,7 +97,7 @@ angular.module('ih_app', [
     return {
         restrict : 'E',
         replace : true,
-        template : '<div class="input-group date" id="datetimepicker1"> <input type="text" ng-model="requireddate" class="form-control" /> <span class="input-group-addon"> <span class="glyphicon glyphicon-calendar"></span></span></div>',
+        template : '<div class="input-group date" id="datetimepicker1"> <input type="text" ng-model="requireddate" class="form-control form-control-sm" /> <span class="input-group-addon"> <span class="glyphicon glyphicon-calendar"></span></span></div>',
         scope:{
            requireddate: '=',
            getvisitors: '&'          
