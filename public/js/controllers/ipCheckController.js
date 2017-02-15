@@ -1,5 +1,5 @@
 angular.module('ipCheckControllerModule',[])
-    .controller('ipCheckController', ['$scope', 'companyService', function ($scope, companyService) {
+    .controller('ipCheckController', ['$scope', 'utilityService', 'companyService', function ($scope, utilityService, companyService) {
         var collectionName = "clicky",
             collectionObj = {
                 collection : collectionName
@@ -19,7 +19,7 @@ angular.module('ipCheckControllerModule',[])
 
         function updatePages(){
             var totalPages = Math.floor($scope.cursor_total / $scope.cursor_limit) + 1;            
-            var diff = 5;
+            var diff = 3;
             var page = $scope.page;
             var pageMin = page - diff;
             var tempCalc = 0;
@@ -91,18 +91,6 @@ angular.module('ipCheckControllerModule',[])
             }
         }
 
-        function getClickyIP(){
-            var url = utilityService.makeUrl(['clicky/visitors-ip',data, skip, limit]);
-            utilityService.makeHttpRequest(url, function(result){
-                if(result.error){
-                    $scope.error =  result.statusText;
-                }
-                else {                    
-                    $scope.records = result;                        
-                }
-            });
-        }
-
         $scope.initSearch = function(page){
             var options;
             if(page){
@@ -139,12 +127,43 @@ angular.module('ipCheckControllerModule',[])
             }                              
         };
 
-        $scope.getInfo = function (_id){
+        $scope.getInfo = function (_id, resolve, reject){
             $scope.recordsInfo = {};
-            var options = {
-                "_id" : _id
-            };
-            customService.getRecordInfo(options, getRecordInfoCallBack);
+            $scope.clicky_fields = [];
+            $scope.clicky_loading = true;
+            var projection = ['geolocation', 'latitude', 'longitude', 'organization'];          
+            var url = utilityService.makeUrl([utilityService.server_base_url, 'clicky', 'visitor-info', _id, projection.join(",")]);
+            utilityService.makeHttpRequest(url, function(result){
+                $scope.clicky_loading = false;
+                $scope.clicky_fields = [
+                    {"key" : "country",  "name" : "Country"},
+                    {"key" : "region",    "name" : "State/Province"},            
+                    {"key" : "city",         "name" : "City"},
+                    {"key" : "postalCode",      "name" : "Zip Code"},
+                    {"key" : "latitude",     "name" : "Latitude"},
+                    {"key" : "longitude",    "name" : "Longitude"},
+                    {"key" : "isp",          "name" : "ISP"},
+                    {"key" : "organization", "name" : "Organization"}
+                ];
+                
+                if(typeof result["geolocation"] !== "undefined"){
+                    var geoData = result['geolocation'].split(",");
+                    if(geoData.length){
+                        result['city'] = geoData[0];
+                        result['region'] = geoData[1] || "";
+                       if(typeof geoData[2] === "undefined"){
+                           result['country'] = result['region'];
+                           result['region'] = "";
+                       }
+                       else
+                       {
+                           result['country'] = geoData[2];
+                       }
+                    }
+                }
+                $scope.recordsInfo = result;
+                resolve();
+            });            
         };            
 
         $scope.searchUsingIplocation = function(resolve, reject){
@@ -152,7 +171,7 @@ angular.module('ipCheckControllerModule',[])
             $scope.iplocation_fields = [];
             $scope.iplocation_loading = true;
             var ip = $scope.search_ip.trim();
-            var url = utilityService.makeUrl(['ipcheck',ip]);
+            var url = utilityService.makeUrl([utilityService.server_base_url, 'ipcheck',ip]);
             utilityService.makeHttpRequest(url, function(result){
                 $scope.iplocation_loading = false;
                 $scope.iplocation_fields = [
@@ -175,7 +194,7 @@ angular.module('ipCheckControllerModule',[])
              $scope.dbip_fields = [];
              $scope.dbip_loading = true;
             var ip = $scope.search_ip.trim();
-            var url = utilityService.makeUrl(['ipcheck','dbip_api',ip]);
+            var url = utilityService.makeUrl([utilityService.server_base_url , 'ipcheck','dbip_api',ip]);
             utilityService.makeHttpRequest(url, function(result){                
                 $scope.dbip_loading = false;
                 $scope.dbip_fields = [
@@ -220,8 +239,19 @@ angular.module('ipCheckControllerModule',[])
             }            
         };
 
-        $scope.searchIpInfo = function(){          
+        $scope.searchIpInfo = function(_id, ip){          
             var promiseArr = [];
+            if(ip){
+                $scope.search_ip = ip;
+            }
+
+            if(_id){
+                promiseArr.push(
+                    new Promise(function(resolve, reject){
+                        $scope.getInfo(_id, resolve, reject);
+                    })
+                );
+            }
             promiseArr.push(
                 new Promise(function(resolve, reject){
                     $scope.searchUsingIplocation(resolve, reject);

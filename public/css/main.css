@@ -270,7 +270,7 @@ a, .field-label {
     color : #333;
     font-size: 20px;
 }
-.loading_dbip, .loading_iplocation {   
+.loading_ipcontent {   
     margin-top: 50px;  
     width: 100%;
     text-align : center;  
@@ -539,9 +539,12 @@ input[type=checkbox], input[type=radio] {
     margin-bottom: 5px;
 }
 
+.clicky-data-ul > li:hover {
+    cursor: pointer
+}
+
 .ip-heading {
-    font-size: 1.2em;
-    font-weight: bold;
+    font-size: 1.5em;
     margin-bottom: 5px;
 
 }

@@ -150,38 +150,32 @@ router.get('/visitors-list-total/:date/:search', function (req, res, next) {
     });
 });
 
-router.get('/visitors-ip/:date/:skip/:limit', function (req, res, next) {
-    var date = req.params['date'];
-    var projection_str = 'ip_address';
-    var projectionQuery = crud.buildProjectionQuery(projection_str);
-    var query = {        
-        "projection" : projectionQuery,
-        "skip" : Number(req.params.skip),
-        "limit" : Number(req.params.limit)
-    };
-    
-    query.find = {"date" : date};             
-
-    MongoClient.connect(dbUrl, function(err, db) {              
-        crud.find(db,collection_name,query,function(docs){
-            if(docs && docs.length){
-                 res.json(docs);
-            }
-            else
-            {
-                res.json({ error: true , statusText: 'Could not retrieve data!' });
-            }           
-            db.close();
-        });
-    });      
-});
-
-
-
 router.get('/visitor-info/:_id', function(req, res, next) {
   var _id = req.params['_id'];
   var query = { 
     "find" : {"_id" : new ObjectID(_id) }    
+  };  
+  MongoClient.connect(dbUrl, function(err, db) {       
+    crud.findOne(db,collection_name,query,function(doc){
+        if(doc){
+            res.json(doc);
+        }
+        else
+        {
+            res.json({ error: true , statusText: 'Could not retrieve data!' });
+        }           
+        db.close();
+    });
+ });
+});
+
+router.get('/visitor-info/:_id/:projection', function(req, res, next) {
+  var _id = req.params['_id'];
+  var projection_str = req.params['projection'];
+  var projectionQuery = crud.buildProjectionQuery(projection_str); 
+  var query = { 
+    "find" : {"_id" : new ObjectID(_id) },
+    "projection" : projectionQuery  
   };  
   MongoClient.connect(dbUrl, function(err, db) {       
     crud.findOne(db,collection_name,query,function(doc){
