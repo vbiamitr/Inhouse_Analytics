@@ -14,8 +14,16 @@ angular.module('ipCheckControllerModule',[])
         $scope.iplocation_fields = [];
         $scope.recordsInfo = {};        
         $scope.colsw = 100;
-        $scope.fields = [];  
-        $scope.fieldInfo = {};
+        $scope.fields = [
+            {"key" : "country",         "name" : "Country",         "clicky" : "country",       "dbip" : "countryName",     "iplocation":"country"},
+            {"key" : "region",          "name" : "State/Province",  "clicky" : "region",        "dbip" : "stateProv",       "iplocation":"region"},            
+            {"key" : "city",            "name" : "City",            "clicky" : "city",          "dbip" : "city",            "iplocation":"city"},
+            {"key" : "postalCode",      "name" : "Zip Code",        "clicky" : "postalCode",    "dbip" : "zipCode",         "iplocation":"postalCode"},
+            {"key" : "latitude",        "name" : "Latitude",        "clicky" : "latitude",      "dbip" : "latitude",        "iplocation":"latitude"},
+            {"key" : "longitude",       "name" : "Longitude",       "clicky" : "longitude",     "dbip" : "longitude",       "iplocation":"longitude"},
+            {"key" : "isp",             "name" : "ISP",             "clicky" : "isp",           "dbip" : "isp",             "iplocation":"isp"},
+            {"key" : "organization",    "name" : "Organization",    "clicky" : "organization",  "dbip" : "organization",    "iplocation":"organization"}
+        ];       
 
         function updatePages(){
             var totalPages = Math.floor($scope.cursor_total / $scope.cursor_limit) + 1;            
@@ -128,115 +136,149 @@ angular.module('ipCheckControllerModule',[])
         };
 
         $scope.getInfo = function (_id, resolve, reject){
-            $scope.recordsInfo = {};
-            $scope.clicky_fields = [];
+            $scope.recordsInfo = []; // reset
             $scope.clicky_loading = true;
             var projection = ['geolocation', 'latitude', 'longitude', 'organization'];          
             var url = utilityService.makeUrl([utilityService.server_base_url, 'clicky', 'visitor-info', _id, projection.join(",")]);
             utilityService.makeHttpRequest(url, function(result){
-                $scope.clicky_loading = false;
-                $scope.clicky_fields = [
-                    {"key" : "country",  "name" : "Country"},
-                    {"key" : "region",    "name" : "State/Province"},            
-                    {"key" : "city",         "name" : "City"},
-                    {"key" : "postalCode",      "name" : "Zip Code"},
-                    {"key" : "latitude",     "name" : "Latitude"},
-                    {"key" : "longitude",    "name" : "Longitude"},
-                    {"key" : "isp",          "name" : "ISP"},
-                    {"key" : "organization", "name" : "Organization"}
-                ];
-                
-                if(typeof result["geolocation"] !== "undefined"){
-                    var geoData = result['geolocation'].split(",");
-                    if(geoData.length){
-                        result['city'] = geoData[0];
-                        result['region'] = geoData[1] || "";
-                       if(typeof geoData[2] === "undefined"){
-                           result['country'] = result['region'];
-                           result['region'] = "";
-                       }
-                       else
-                       {
-                           result['country'] = geoData[2];
-                       }
-                    }
+                $scope.clicky_loading = false;    
+                if(result.error){
+                    $scope.errorMsg = result.statusText;
                 }
-                $scope.recordsInfo = result;
+                else {
+                    if(typeof result["geolocation"] !== "undefined"){
+                        var geoData = result['geolocation'].split(",");
+                        if(geoData.length == 1){
+                            result['country'] = geoData[0];                            
+                            result['city'] = "";
+                            result['region'] = "";
+                        }
+                        else if(geoData.length == 2){
+                            result['city'] = geoData[0];
+                            result['country'] = geoData[1].trim();
+                            result['region'] = "";
+
+                        }
+                        else if(geoData.length == 3) {
+                            result['city'] = geoData[0];                            
+                            result['region'] = geoData[1].trim();
+                            result['country'] = geoData[2].trim();
+                        }
+                    }
+
+                    $scope.fields.forEach(function(field, index){
+                        var info = {
+                            "key" : field.key,
+                            "name" : field.name
+                        };
+                        info["val"] = result[field.clicky] || '';
+                        $scope.recordsInfo.push(info);
+                    });
+                }                
                 resolve();
             });            
         };            
 
         $scope.searchUsingIplocation = function(resolve, reject){
-            $scope.iplocation_info = {}; // reset
-            $scope.iplocation_fields = [];
+            $scope.iplocation_info = []; // reset            
             $scope.iplocation_loading = true;
             var ip = $scope.search_ip.trim();
             var url = utilityService.makeUrl([utilityService.server_base_url, 'ipcheck',ip]);
             utilityService.makeHttpRequest(url, function(result){
                 $scope.iplocation_loading = false;
-                $scope.iplocation_fields = [
-                    {"key" : "country",  "name" : "Country"},
-                    {"key" : "region",    "name" : "State/Province"},            
-                    {"key" : "city",         "name" : "City"},
-                    {"key" : "postalCode",      "name" : "Zip Code"},
-                    {"key" : "latitude",     "name" : "Latitude"},
-                    {"key" : "longitude",    "name" : "Longitude"},
-                    {"key" : "isp",          "name" : "ISP"},
-                    {"key" : "organization", "name" : "Organization"}
-                ];
-                $scope.iplocation_info = result;
+                if(result.error){
+                    $scope.errorMsg = result.statusText;
+                }
+                else {                    
+                    $scope.fields.forEach(function(field, index){
+                        var info = {
+                            "key" : field.key,
+                            "name" : field.name
+                        };
+                        info["val"] = result[field.iplocation] || '';
+                        $scope.iplocation_info.push(info);
+                    }); 
+                }                               
                 resolve();
             });
         };
 
         $scope.searchUsingDbIp = function(resolve, reject){
-             $scope.dbip_info = {}; // reset
-             $scope.dbip_fields = [];
+             $scope.dbip_info = []; // reset             
              $scope.dbip_loading = true;
             var ip = $scope.search_ip.trim();
             var url = utilityService.makeUrl([utilityService.server_base_url , 'ipcheck','dbip_api',ip]);
             utilityService.makeHttpRequest(url, function(result){                
                 $scope.dbip_loading = false;
-                $scope.dbip_fields = [
-                    {"key" : "countryName",  "name" : "Country"},
-                    {"key" : "stateProv",    "name" : "State/Province"},
-                    /*{"key" : "district",     "name" : "district"},*/
-                    {"key" : "city",         "name" : "City"},
-                    {"key" : "zipCode",      "name" : "Zip Code"},
-                    {"key" : "latitude",     "name" : "Latitude"},
-                    {"key" : "longitude",    "name" : "Longitude"},
-                    {"key" : "isp",          "name" : "ISP"},
-                    {"key" : "organization", "name" : "Organization"}
-                ];
-                $scope.dbip_info = result;
-                resolve();
-                
+                if(result.error){
+                    $scope.errorMsg = result.statusText;
+                }
+                else {
+                    $scope.fields.forEach(function(field, index){
+                        var info = {
+                            "key" : field.key,
+                            "name" : field.name
+                        };
+                        info["val"] = result[field.dbip] || '';
+                        $scope.dbip_info.push(info);
+                    });
+                }                
+                resolve();                
             });
         };
 
-        $scope.analyzeIp = function(){
-            if(Object.keys($scope.dbip_info).length && Object.keys($scope.iplocation_info).length){
-                if($scope.dbip_info.hasOwnProperty("error") || $scope.iplocation_info.hasOwnProperty("error")){
-                    return;
+        function getParticipants(applicants){
+            var participants = [];
+            applicants.forEach(function(apl, i){
+                if($scope[apl].length){
+                    participants.push($scope[apl]);
                 }
+            });
+            return participants;
+        }
 
-                $scope.analyzedIp = {};
-                $scope.dbip_fields.forEach(function(field, i){
-                    if(field.name == $scope.iplocation_fields[i].name){
-                        if($scope.dbip_info[field.key] == $scope.iplocation_info[$scope.iplocation_fields[i].key]){
-                            $scope.analyzedIp[field.name] = "equal";
+        function compareParticipants(participants){
+            var weight = {};
+            var len = participants.length;
+            var p1,p2,pKey;
+            var fields =  $scope.fields;
+            if(len < 2){
+                return weight;
+            }
+            // initialize weight
+            fields.forEach(function(f,i){
+                var key = f["key"];                
+                weight[key] = 0;                
+            });
+            
+            for(var i=0;i<len-1;i++){
+                p1 = participants[i];
+                for(var j=i+1;j<len;j++){
+                    p2 = participants[j];                    
+                    for(var k=0, flen = p1.length; k<flen; k++){                        
+                        if(p1[k]["key"] == p2[k]["key"] && p1[k]["val"].toString().toLowerCase() == p2[k]["val"].toString().toLowerCase()){ 
+                            pKey = p1[k]["key"];                           
+                            weight[pKey] =  weight[pKey] + 1;
                         }
-                        else
-                        {
-                            $scope.analyzedIp[field.name] = "diff";
-                        }
-
-                        $(".list-group-item_" + i).addClass($scope.analyzedIp[field.name]);
                     }
-                });
+                }
+            }
+            return weight;
+        }
 
-                
-            }            
+        $scope.analyzeIp = function(){
+            var applicants = ['recordsInfo', 'dbip_info', 'iplocation_info'];
+            var participants = getParticipants(applicants);
+            var weight = compareParticipants(participants);
+            var colors= ['#FF0000', '#F39C12', '#28B463'];
+            $scope.fields.forEach(function(field, i){
+                var w = weight[field.key];
+                if(w !== colors.length){
+                    $(".list-group-item_" + i).css({
+                        "color" : colors[w]
+                    });
+                }                
+            });          
         };
 
         $scope.searchIpInfo = function(_id, ip){          

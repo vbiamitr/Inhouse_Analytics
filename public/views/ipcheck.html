@@ -56,7 +56,10 @@
                 </div>
                 <div class="info">
                     <ul class="list-group">
-                        <li  ng-repeat="field in clicky_fields" class="list-group-item {{'list-group-item_' + $index}}"><span class="ip_label">{{field.name}} </span> : &nbsp; {{recordsInfo[field.key] || ""}}</li>                        
+                        <li  ng-repeat="info in recordsInfo" class="list-group-item {{'list-group-item_' + $index}}"><span class="ip_label">{{info.name}} </span> : &nbsp; {{ info.val || ""}}</li>                        
+                        
+                        <!-- <li  ng-repeat="field in clicky_fields" class="list-group-item {{'list-group-item_' + $index}}"><span class="ip_label">{{field.name}} </span> : &nbsp; {{recordsInfo[field.key] || ""}}</li> 
+                        -->                       
                     </ul>
                 </div>
             </div>
@@ -70,7 +73,8 @@
                 </div>
                 <div class="info">
                     <ul class="list-group">
-                        <li  ng-repeat="field in dbip_fields" class="list-group-item {{'list-group-item_' + $index}}"><span class="ip_label">{{field.name}} </span> : &nbsp; {{dbip_info[field.key]}}</li>                        
+                        <li  ng-repeat="info in dbip_info" class="list-group-item {{'list-group-item_' + $index}}"><span class="ip_label">{{info.name}} </span> : &nbsp; {{ info.val || ""}}</li>
+                        <!-- <li  ng-repeat="field in dbip_fields" class="list-group-item {{'list-group-item_' + $index}}"><span class="ip_label">{{field.name}} </span> : &nbsp; {{dbip_info[field.key]}}</li>  -->                      
                     </ul>
                 </div>
 
@@ -84,7 +88,9 @@
                 </div>
                 <div class="info">
                     <ul class="list-group">
-                        <li  ng-repeat="field in iplocation_fields" class="list-group-item {{'list-group-item_' + $index}}"><span class="ip_label">{{field.name}} </span> : &nbsp; {{iplocation_info[field.key]}}</li>                         
+                        <li  ng-repeat="info in iplocation_info" class="list-group-item {{'list-group-item_' + $index}}"><span class="ip_label">{{info.name}} </span> : &nbsp; {{ info.val || ""}}</li>
+                        
+                        <!--<li  ng-repeat="field in iplocation_fields" class="list-group-item {{'list-group-item_' + $index}}"><span class="ip_label">{{field.name}} </span> : &nbsp; {{iplocation_info[field.key]}}</li> -->                        
                     </ul>
                 </div>
             </div>
