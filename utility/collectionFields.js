@@ -280,6 +280,11 @@ var schema = [
             name: "Landing Page",
             type: "string"
         },
+        domain: {
+            info: "Domain name of the organization",
+            name: "Domain",
+            type: "string"
+        },
         actions:  {
             info: "actions",
             name: "actions",
