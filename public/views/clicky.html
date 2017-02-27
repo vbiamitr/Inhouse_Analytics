@@ -95,37 +95,40 @@
       <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
-                <div class="modal-header">
-                    <button ng-click="removeComments()" type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <h4 class="modal-title" id="myModalLabel">Details </h4>
-                    
-                </div>
-                <div class="modal-body">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-md-6 info-div" ng-repeat="(key, info) in recordsInfo" ng-if="key != 'actions' && fieldInfo.hasOwnProperty(key)"> 
-                                <div class="info-label">{{fieldInfo[key].name}}</div> 
-                                <div class="info-data" title="Click to edit" >
-                                    <input style="width:90%" type="text" id="{{key}}" value="{{info}}" disabled> 
-                                    <span ng-click="allowEditing(key)" class="glyphicon glyphicon-pencil info-editsave-btn"></span>
-                                    <span ng-click="saveEditing(key)" class="glyphicon glyphicon-floppy-disk info-editsave-btn"></span>                                    
-                                </div>
-                            </div>                            
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12 info-div"> <div class="info-label">Actions</div>
-                                <ul>
-                                    <li ng-repeat="action in recordsInfo['actions']">
-                                        <p class="action-info" >{{action['action_title']}}</p>
-                                        <p>{{action['action_url']}}</p>
-                                    </li>
-                                </ul>                                
-                            </div>                    
-                        </div>
-                    </div>                    
-                </div>                
+                    <div class="modal-header">
+                        <button ng-click="removeComments()" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <button ng-click="addToCompany()" title="add to company database" type="button" class="close" ng-disabled="recordsInfo['addedToCompany']">
+                            <span aria-hidden="true" class="glyphicon glyphicon-floppy-disk add-to-company"></span>
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">Details </h4>
+                        
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-md-6 info-div" ng-repeat="(key, info) in recordsInfo" ng-if="key != 'actions' && fieldInfo.hasOwnProperty(key)"> 
+                                    <div class="info-label">{{fieldInfo[key].name}}</div> 
+                                    <div class="info-data" title="Click to edit" >
+                                        <input style="width:90%" type="text" id="{{key}}" value="{{info}}" disabled> 
+                                        <span ng-click="allowEditing(key)" class="glyphicon glyphicon-pencil info-editsave-btn"></span>
+                                        <span ng-click="saveEditing(key)" class="glyphicon glyphicon-floppy-disk info-editsave-btn"></span>                                    
+                                    </div>
+                                </div>                            
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 info-div"> <div class="info-label">Actions</div>
+                                    <ul>
+                                        <li ng-repeat="action in recordsInfo['actions']">
+                                            <p class="action-info" >{{action['action_title']}}</p>
+                                            <p>{{action['action_url']}}</p>
+                                        </li>
+                                    </ul>                                
+                                </div>                    
+                            </div>
+                        </div>                    
+                    </div>                
                 </div>
             </div>
         </div>

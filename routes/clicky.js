@@ -7,7 +7,32 @@ var crud = require('../models/crud');
 var moment = require('moment');
 var router = express.Router();
 var dbUrl = conf.clicky_url;
+var url = conf.url;
 var collection_name = "vbi_visitors";
+
+var schemaInfo = {};
+
+(function getSchemaInfo(){
+     MongoClient.connect(conf.url, function(err, db) {
+        var collection_name = 'collection_fields';
+        var query = { 
+            find: {
+                '_id' : 'company'
+            }           
+        };
+        crud.findOne(db,collection_name,query,function(doc){
+            if(doc){
+                 schemaInfo = doc;
+                 console.log(JSON.stringify(schemaInfo));
+            }
+            else
+            {
+                console.log('Could not retrieve data!');
+            }           
+            db.close();
+        });
+    });
+})();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {  
@@ -250,6 +275,77 @@ router.get('/clicky-fieldsinfo', function(req, res, next) {
             db.close();
         });
     });
+});
+
+router.get('/add-to-company/:_id/', function(req, res, next) {
+  var _id = req.params['_id'];
+  var projection_str = "domain, organization, geolocation, ip_address";
+  var projectionQuery = crud.buildProjectionQuery(projection_str)
+  var query = { 
+    "find" : {"_id" : new ObjectID(_id) },
+    "projection" : projectionQuery  
+  };  
+  
+  MongoClient.connect(dbUrl, function(err, db) {        
+    crud.findOne(db,collection_name,query,function(doc){
+        if(doc){           
+            var columns = Object.keys(schemaInfo).slice(1);
+            var query ={columns: columns, find:'domain', docs:[]};
+            query.collectionFields = schemaInfo;      
+            var data = {"domain" : doc.domain, "company" : doc.organization, "ip_address" : doc.ip_address};           
+            if(typeof doc["geolocation"] !== "undefined"){
+                var geoData = doc['geolocation'].split(",");
+                if(geoData.length == 1){
+                    data['country'] = geoData[0];                            
+                    data['city'] = "";
+                    data['state'] = "";
+                }
+                else if(geoData.length == 2){
+                    data['city'] = geoData[0];
+                    data['country'] = geoData[1].trim();
+                    data['state'] = "";
+
+                }
+                else if(geoData.length == 3) {
+                    data['city'] = geoData[0];                            
+                    data['state'] = geoData[1].trim();
+                    data['country'] = geoData[2].trim();
+                }
+             }             
+             query.docs = query.docs.concat(data);
+             var collection_name = 'company';
+             MongoClient.connect(url, function(err, ih_db) { 
+                crud.insertIfNotExistUnorderedBulkOperation(ih_db,collection_name,query,function(){
+                    res.send('Document saved in database');
+
+                    // update "addedToCompany" flag in vbi_visitors collection in clicky database
+                    var query = [
+                        {"_id" : new ObjectID(_id) },
+                        {$set:{}}
+                    ];
+                    var collection_name = "vbi_visitors";
+                    query[1]['$set']['addedToCompany'] = true;  
+                    crud.updateOne(db,collection_name,query,function(doc){
+                        if(doc){
+                            console.log("vbi_visitors updated with addedToCompany flag");
+                        }
+                        else
+                        {
+                            console.log("vbi_visitors cannot be updated with addedToCompany flag");
+                        }           
+                        db.close();
+                    });
+                }); 
+             });     
+        }
+        else
+        {
+            res.json({ error: true , statusText: 'Could not retrieve data!' });
+            db.close();
+        }           
+        
+    });
+ });
 });
 
 

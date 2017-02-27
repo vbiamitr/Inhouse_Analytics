@@ -153,10 +153,12 @@ module.exports = {
                 });
                 if (u_doc[query.find]) {
                     qfind[query.find] = u_doc[query.find];
+                    console.log("^^^^^^^^^^^^^^^^^^^^^^^^u_doc = " + JSON.stringify(u_doc));
                     collection.updateOne(qfind,{ $set: u_doc }, function(err, result){
+                        console.log("result.result.n = " + JSON.stringify(result.result));
                         if(!result.result.n){
                             insert_arr.push(i_doc);
-                        }
+                        } 
                         checkDocsToInsertOrUpdate(docs);
                     });                    
                 }
@@ -166,11 +168,15 @@ module.exports = {
             }
             else {
                 if(insert_arr.length){
-                    collection.insertMany(insert_arr, function(err, result){                        
+                    collection.insertMany(insert_arr, function(err, result){  
+                        if(err){
+                            console.log("Error : " + err);
+                        }                      
                         cb();
                     });
                 }
                 else{
+                    console.log("in Else");
                     cb();
                 }                                             
             }
@@ -181,7 +187,7 @@ module.exports = {
         var query = {};
         var projection_arr = projection_params.split(',');
         for(var i=0, len=projection_arr.length; i<len; i++){
-            query[projection_arr[i]] = 1;
+            query[projection_arr[i].trim()] = 1;
         }
         return query;
     }

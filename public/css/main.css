@@ -546,5 +546,18 @@ input[type=checkbox], input[type=radio] {
 .ip-heading {
     font-size: 1.5em;
     margin-bottom: 5px;
+}
 
+.add-to-company{
+    font-size: 0.8em;
+    padding-right: 10px; 
+    padding-top: 3px;
+}
+
+button:disabled {
+    cursor: not-allowed;
+}
+
+button:disabled > span {
+    cursor: not-allowed;
 }

@@ -1,5 +1,5 @@
 angular.module('clickyControllerModule',[])
-    .controller('clickyController', ['$scope', 'companyService', function ($scope, companyService) {
+    .controller('clickyController', ['$scope', 'companyService', 'utilityService', function ($scope, companyService, utilityService) {
         var collectionName = "clicky",
             collectionObj = {
                 collection : collectionName
@@ -106,6 +106,15 @@ angular.module('clickyControllerModule',[])
             }
         }
 
+        function addToCompanyCallback(result){
+            if(result.error){
+                $scope.error =  result.statusText;
+            }
+            else{
+                console.log("Result = " + result);
+            }
+        }
+
         $scope.initSearch = function(page){
             var options;
             if(page){
@@ -202,6 +211,20 @@ angular.module('clickyControllerModule',[])
                 customService.updateRecordInfo(options, updateRecordInfoCallback);               
             }
         };
+
+        $scope.addToCompany = function(){
+            alert("clicked");
+            var domain = $("#domain").val();
+            var urlParams = [];
+            var _id = $scope.recordsInfo._id;
+            if(domain.trim().length && _id){
+                urlParams = [utilityService.server_base_url ,'clicky', 'add-to-company' , _id];                    
+                utilityService.makeHttpRequest(utilityService.makeUrl(urlParams), addToCompanyCallback); 
+            }
+            else{
+                alert("Please provide domain to add the record to Company database");
+            }
+        }
 
         customService.getFields({}, getFieldsCallback);
         customService.getFieldsInfo({}, getFieldsInfoCallback);                      
